@@ -37,15 +37,8 @@ dependencies {
     implementation(projects.reactiveNetwork)
 
     implementation(libs.coroutines.core)
-    implementation(libs.coroutines.android)
 
 
     implementation(libs.coreKtx)
-//    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintlayout)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso)
 }
