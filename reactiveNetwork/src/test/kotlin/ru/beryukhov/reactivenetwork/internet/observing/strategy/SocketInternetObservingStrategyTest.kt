@@ -1,6 +1,7 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
-import com.google.common.truth.Truth
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -8,19 +9,14 @@ import io.mockk.verify
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
-import kotlinx.coroutines.runBlocking
-import org.junit.Ignore
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import ru.beryukhov.reactivenetwork.base.BaseFlowTest
-import ru.beryukhov.reactivenetwork.base.emission
-import ru.beryukhov.reactivenetwork.base.expect
-import ru.beryukhov.reactivenetwork.base.testIn
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 
 @RunWith(RobolectricTestRunner::class)
-class SocketInternetObservingStrategyTest : BaseFlowTest() {
+class SocketInternetObservingStrategyTest {
 
     private val strategy = spyk(SocketInternetObservingStrategy())
     private val errorHandler = mockk<ErrorHandler>(relaxed = true)
@@ -28,9 +24,10 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
 
     private val host: String = strategy.getDefaultPingHost()
 
-    @Ignore
+    //    @Ignore
     @Test
-    fun shouldBeConnectedToTheInternet() { // given
+    fun shouldBeConnectedToTheInternet() = runTest {
+        // given
         every {
             strategy.isConnected(
                 host,
@@ -42,7 +39,7 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
 
         // when
 
-        val testFlow = strategy.observeInternetConnectivity(
+        strategy.observeInternetConnectivity(
             INITIAL_INTERVAL_IN_MS,
             INTERVAL_IN_MS,
             host,
@@ -50,16 +47,16 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
             TIMEOUT_IN_MS,
             HTTP_RESPONSE,
             errorHandler
-        ).testIn(scope = testScopeRule)
-
-        // then
-        testFlow expect emission(index = 0, expected = true)
-
+        ).test {
+            // then
+            assertThat(awaitItem()).isEqualTo(true)
+        }
     }
 
-    @Ignore
+    //    @Ignore
     @Test
-    fun shouldNotBeConnectedToTheInternet() { // given
+    fun shouldNotBeConnectedToTheInternet() = runTest {
+        // given
         every {
             strategy.isConnected(
                 host,
@@ -70,7 +67,7 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
         } returns false
         // when
 
-        val testFlow = strategy.observeInternetConnectivity(
+        strategy.observeInternetConnectivity(
             INITIAL_INTERVAL_IN_MS,
             INTERVAL_IN_MS,
             host,
@@ -78,16 +75,16 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
             TIMEOUT_IN_MS,
             HTTP_RESPONSE,
             errorHandler
-        ).testIn(scope = testScopeRule)
-
-        // then
-        testFlow expect emission(index = 0, expected = false)
-
+        ).test {
+            // then
+            assertThat(awaitItem()).isEqualTo(false)
+        }
     }
 
     @Test
     @Throws(IOException::class)
-    fun shouldNotBeConnectedToTheInternetWhenSocketThrowsAnExceptionOnConnect() { // given
+    fun shouldNotBeConnectedToTheInternetWhenSocketThrowsAnExceptionOnConnect() {
+        // given
         val address = InetSocketAddress(
             host,
             PORT
@@ -103,12 +100,13 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
             errorHandler
         )
         // then
-        Truth.assertThat(isConnected).isFalse()
+        assertThat(isConnected).isFalse()
     }
 
     @Test
     @Throws(IOException::class)
-    fun shouldHandleAnExceptionThrownDuringClosingTheSocket() { // given
+    fun shouldHandleAnExceptionThrownDuringClosingTheSocket() {
+        // given
         val errorMsg = "Could not close the socket"
         val givenException = IOException(errorMsg)
         every { socket.close() } throws (givenException)
@@ -126,7 +124,8 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
     }
 
     @Test
-    fun shouldBeConnectedToTheInternetViaSingle() { // given
+    fun shouldBeConnectedToTheInternetViaSingle() = runTest {
+        // given
         every {
             strategy.isConnected(
                 host,
@@ -135,22 +134,22 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
                 errorHandler
             )
         } returns true
-        runBlocking {
-            // when
-            val isConnected = strategy.checkInternetConnectivity(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                HTTP_RESPONSE,
-                errorHandler
-            )
-            // then
-            Truth.assertThat(isConnected).isTrue()
-        }
+        // when
+        val isConnected = strategy.checkInternetConnectivity(
+            host,
+            PORT,
+            TIMEOUT_IN_MS,
+            HTTP_RESPONSE,
+            errorHandler
+        )
+        // then
+        assertThat(isConnected).isTrue()
+
     }
 
     @Test
-    fun shouldNotBeConnectedToTheInternetViaSingle() { // given
+    fun shouldNotBeConnectedToTheInternetViaSingle() = runTest {
+        // given
         every {
             strategy.isConnected(
                 host,
@@ -159,18 +158,16 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
                 errorHandler
             )
         } returns false
-        runBlocking {
-            // when
-            val isConnected = strategy.checkInternetConnectivity(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                HTTP_RESPONSE,
-                errorHandler
-            )
-            // then
-            Truth.assertThat(isConnected).isFalse()
-        }
+        // when
+        val isConnected = strategy.checkInternetConnectivity(
+            host,
+            PORT,
+            TIMEOUT_IN_MS,
+            HTTP_RESPONSE,
+            errorHandler
+        )
+        // then
+        assertThat(isConnected).isFalse()
     }
 
     @Test
@@ -178,7 +175,7 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
         val transformedHost =
             strategy.adjustHost(HOST_WITHOUT_HTTP)
         // then
-        Truth.assertThat(transformedHost)
+        assertThat(transformedHost)
             .isEqualTo(HOST_WITHOUT_HTTP)
     }
 
@@ -187,7 +184,7 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
         val transformedHost =
             strategy.adjustHost(HOST_WITH_HTTP)
         // then
-        Truth.assertThat(transformedHost)
+        assertThat(transformedHost)
             .isEqualTo(HOST_WITHOUT_HTTP)
     }
 
@@ -196,12 +193,13 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
         val transformedHost =
             strategy.adjustHost(HOST_WITH_HTTP)
         // then
-        Truth.assertThat(transformedHost)
+        assertThat(transformedHost)
             .isEqualTo(HOST_WITHOUT_HTTP)
     }
 
     @Test
-    fun shouldAdjustHostDuringCheckingConnectivity() { // given
+    fun shouldAdjustHostDuringCheckingConnectivity() = runTest {
+        // given
         val host = host
         every {
             strategy.isConnected(
@@ -222,7 +220,7 @@ class SocketInternetObservingStrategyTest : BaseFlowTest() {
             TIMEOUT_IN_MS,
             HTTP_RESPONSE,
             errorHandler
-        ).testIn(scope = testScopeRule)
+        ).test {}
         // then
         verify { strategy.adjustHost(host) }
 

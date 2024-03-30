@@ -22,8 +22,8 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
  * Network observing strategy for Android devices before Lollipop (API 20 or lower).
  * Uses Broadcast Receiver.
  */
-class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
-    @OptIn(ExperimentalCoroutinesApi::class)
+public class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
+
     override fun observeNetworkConnectivity(context: Context): Flow<Connectivity> {
         val filter = IntentFilter()
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)

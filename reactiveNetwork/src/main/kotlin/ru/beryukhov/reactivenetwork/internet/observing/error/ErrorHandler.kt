@@ -1,5 +1,5 @@
 package ru.beryukhov.reactivenetwork.internet.observing.error
 
-interface ErrorHandler {
-    fun handleError(exception: Exception?, message: String?)
+public interface ErrorHandler {
+    public fun handleError(exception: Exception?, message: String?)
 }

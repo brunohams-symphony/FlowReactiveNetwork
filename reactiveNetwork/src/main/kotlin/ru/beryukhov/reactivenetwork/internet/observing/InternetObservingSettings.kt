@@ -10,7 +10,7 @@ import java.net.HttpURLConnection
  * We should use its Builder for creating new settings
  */
 // I want to have the same method names as variable names on purpose
-class InternetObservingSettings private constructor(
+public class InternetObservingSettings private constructor(
     private val initialInterval: Int,
     private val interval: Int,
     private val host: String,
@@ -29,60 +29,60 @@ class InternetObservingSettings private constructor(
     /**
      * @return initial ping interval in milliseconds
      */
-    fun initialInterval(): Int {
+    public fun initialInterval(): Int {
         return initialInterval
     }
 
     /**
      * @return ping interval in milliseconds
      */
-    fun interval(): Int {
+    public fun interval(): Int {
         return interval
     }
 
     /**
      * @return ping host
      */
-    fun host(): String {
+    public fun host(): String {
         return host
     }
 
     /**
      * @return ping port
      */
-    fun port(): Int {
+    public fun port(): Int {
         return port
     }
 
     /**
      * @return ping timeout in milliseconds
      */
-    fun timeout(): Int {
+    public fun timeout(): Int {
         return timeout
     }
 
-    fun httpResponse(): Int {
+    public fun httpResponse(): Int {
         return httpResponse
     }
 
     /**
      * @return error handler for pings and connections
      */
-    fun errorHandler(): ErrorHandler {
+    public fun errorHandler(): ErrorHandler {
         return errorHandler
     }
 
     /**
      * @return internet observing strategy
      */
-    fun strategy(): InternetObservingStrategy {
+    public fun strategy(): InternetObservingStrategy {
         return strategy
     }
 
     /**
      * Settings builder, which contains default parameters
      */
-    class Builder internal constructor() {
+    public class Builder internal constructor() {
         internal var initialInterval = 0
         internal var interval = 2000
         internal var host = "http://clients3.google.com/generate_204"
@@ -98,7 +98,7 @@ class InternetObservingSettings private constructor(
          * @param initialInterval in milliseconds
          * @return Builder
          */
-        fun initialInterval(initialInterval: Int): Builder {
+        public fun initialInterval(initialInterval: Int): Builder {
             this.initialInterval = initialInterval
             return this
         }
@@ -109,7 +109,7 @@ class InternetObservingSettings private constructor(
          * @param interval in milliseconds
          * @return Builder
          */
-        fun interval(interval: Int): Builder {
+        public fun interval(interval: Int): Builder {
             this.interval = interval
             return this
         }
@@ -119,7 +119,7 @@ class InternetObservingSettings private constructor(
          *
          * @return Builder
          */
-        fun host(host: String): Builder {
+        public fun host(host: String): Builder {
             this.host = host
             return this
         }
@@ -129,7 +129,7 @@ class InternetObservingSettings private constructor(
          *
          * @return Builder
          */
-        fun port(port: Int): Builder {
+        public fun port(port: Int): Builder {
             this.port = port
             return this
         }
@@ -140,7 +140,7 @@ class InternetObservingSettings private constructor(
          * @param timeout in milliseconds
          * @return Builder
          */
-        fun timeout(timeout: Int): Builder {
+        public fun timeout(timeout: Int): Builder {
             this.timeout = timeout
             return this
         }
@@ -151,7 +151,7 @@ class InternetObservingSettings private constructor(
          * @param httpResponse as integer
          * @return Builder
          */
-        fun httpResponse(httpResponse: Int): Builder {
+        public fun httpResponse(httpResponse: Int): Builder {
             this.httpResponse = httpResponse
             return this
         }
@@ -161,7 +161,7 @@ class InternetObservingSettings private constructor(
          *
          * @return Builder
          */
-        fun errorHandler(errorHandler: ErrorHandler): Builder {
+        public fun errorHandler(errorHandler: ErrorHandler): Builder {
             this.errorHandler = errorHandler
             return this
         }
@@ -172,21 +172,21 @@ class InternetObservingSettings private constructor(
          * @param strategy for observing and internet connection
          * @return Builder
          */
-        fun strategy(strategy: InternetObservingStrategy): Builder {
+        public fun strategy(strategy: InternetObservingStrategy): Builder {
             this.strategy = strategy
             return this
         }
 
-        fun build(): InternetObservingSettings {
+        public fun build(): InternetObservingSettings {
             return InternetObservingSettings(this)
         }
     }
 
-    companion object {
+    public companion object {
         /**
          * @return settings with default parameters
          */
-        fun create(): InternetObservingSettings {
+        public fun create(): InternetObservingSettings {
             return Builder()
                 .build()
         }
@@ -195,7 +195,7 @@ class InternetObservingSettings private constructor(
          * Creates builder object
          * @return Builder
          */
-        fun builder(): Builder {
+        public fun builder(): Builder {
             return Builder()
         }
     }

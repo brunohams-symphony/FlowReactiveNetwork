@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.NetworkInfo.DetailedState
 import androidx.test.core.app.ApplicationProvider
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -20,27 +20,28 @@ class ConnectivityTest {
     fun shouldCreateConnectivity() { // when
         val connectivity = Connectivity()
         // then
-        Truth.assertThat(connectivity).isNotNull()
-        Truth.assertThat(connectivity.state)
+        assertThat(connectivity).isNotNull()
+        assertThat(connectivity.state)
             .isEqualTo(NetworkInfo.State.DISCONNECTED)
-        Truth.assertThat(connectivity.detailedState)
+        assertThat(connectivity.detailedState)
             .isEqualTo(DetailedState.IDLE)
-        Truth.assertThat(connectivity.type).isEqualTo(Connectivity.UNKNOWN_TYPE)
-        Truth.assertThat(connectivity.subType).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE)
-        Truth.assertThat(connectivity.available).isFalse()
-        Truth.assertThat(connectivity.failover).isFalse()
-        Truth.assertThat(connectivity.roaming).isFalse()
-        Truth.assertThat(connectivity.typeName)
+        assertThat(connectivity.type).isEqualTo(Connectivity.UNKNOWN_TYPE)
+        assertThat(connectivity.subType).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE)
+        assertThat(connectivity.available).isFalse()
+        assertThat(connectivity.failover).isFalse()
+        assertThat(connectivity.roaming).isFalse()
+        assertThat(connectivity.typeName)
             .isEqualTo(TYPE_NAME_NONE)
-        Truth.assertThat(connectivity.subTypeName)
+        assertThat(connectivity.subTypeName)
             .isEqualTo(TYPE_NAME_NONE)
-        Truth.assertThat(connectivity.reason).isEmpty()
-        Truth.assertThat(connectivity.extraInfo).isEmpty()
+        assertThat(connectivity.reason).isEmpty()
+        assertThat(connectivity.extraInfo).isEmpty()
     }
 
     @Test
     @Throws(Exception::class)
-    fun stateShouldBeEqualToGivenValue() { // given
+    fun stateShouldBeEqualToGivenValue() {
+    // given
         val connectivity = Connectivity(
             state = NetworkInfo.State.CONNECTED,
             type = ConnectivityManager.TYPE_WIFI,
@@ -52,12 +53,13 @@ class ConnectivityTest {
             hasState(connectivity.state)
         val shouldBeEqualToGivenStatus = equalTo.test(connectivity)
         // then
-        Truth.assertThat(shouldBeEqualToGivenStatus).isTrue()
+        assertThat(shouldBeEqualToGivenStatus).isTrue()
     }
 
     @Test
     @Throws(Exception::class)
-    fun stateShouldBeEqualToOneOfGivenMultipleValues() { // given
+    fun stateShouldBeEqualToOneOfGivenMultipleValues() {
+    // given
         val connectivity = Connectivity(
             state = NetworkInfo.State.CONNECTING,
             type = ConnectivityManager.TYPE_WIFI,
@@ -69,12 +71,13 @@ class ConnectivityTest {
         val equalTo = hasState(*states)
         val shouldBeEqualToGivenStatus = equalTo.test(connectivity)
         // then
-        Truth.assertThat(shouldBeEqualToGivenStatus).isTrue()
+        assertThat(shouldBeEqualToGivenStatus).isTrue()
     }
 
     @Test
     @Throws(Exception::class)
-    fun stateShouldNotBeEqualToGivenValue() { // given
+    fun stateShouldNotBeEqualToGivenValue() {
+    // given
         val connectivity = Connectivity(state=NetworkInfo.State.DISCONNECTED,
             type=ConnectivityManager.TYPE_WIFI,
             typeName=TYPE_NAME_WIFI)
@@ -83,12 +86,13 @@ class ConnectivityTest {
         val equalTo = hasState(NetworkInfo.State.CONNECTED)
         val shouldBeEqualToGivenStatus = equalTo.test(connectivity)
         // then
-        Truth.assertThat(shouldBeEqualToGivenStatus).isFalse()
+        assertThat(shouldBeEqualToGivenStatus).isFalse()
     }
 
     @Test
     @Throws(Exception::class)
-    fun typeShouldBeEqualToGivenValue() { // given
+    fun typeShouldBeEqualToGivenValue() {
+    // given
         val connectivity = Connectivity(state=NetworkInfo.State.CONNECTED,
             type=ConnectivityManager.TYPE_WIFI,
             typeName=TYPE_NAME_WIFI)
@@ -98,12 +102,13 @@ class ConnectivityTest {
         val equalTo = hasType(*givenTypes)
         val shouldBeEqualToGivenStatus = equalTo.test(connectivity)
         // then
-        Truth.assertThat(shouldBeEqualToGivenStatus).isTrue()
+        assertThat(shouldBeEqualToGivenStatus).isTrue()
     }
 
     @Test
     @Throws(Exception::class)
-    fun typeShouldBeEqualToOneOfGivenMultipleValues() { // given
+    fun typeShouldBeEqualToOneOfGivenMultipleValues() {
+    // given
         val connectivity = Connectivity(state=NetworkInfo.State.CONNECTING,
             type=ConnectivityManager.TYPE_MOBILE,
             typeName=TYPE_NAME_MOBILE)
@@ -118,12 +123,13 @@ class ConnectivityTest {
         val equalTo = hasType(*givenTypes)
         val shouldBeEqualToGivenStatus = equalTo.test(connectivity)
         // then
-        Truth.assertThat(shouldBeEqualToGivenStatus).isTrue()
+        assertThat(shouldBeEqualToGivenStatus).isTrue()
     }
 
     @Test
     @Throws(Exception::class)
-    fun typeShouldNotBeEqualToGivenValue() { // given
+    fun typeShouldNotBeEqualToGivenValue() {
+    // given
         val connectivity = Connectivity(state=NetworkInfo.State.CONNECTED,
             type=ConnectivityManager.TYPE_WIFI,
             typeName=TYPE_NAME_WIFI)
@@ -134,31 +140,34 @@ class ConnectivityTest {
         val equalTo = hasType(*givenTypes)
         val shouldBeEqualToGivenStatus = equalTo.test(connectivity)
         // then
-        Truth.assertThat(shouldBeEqualToGivenStatus).isFalse()
+        assertThat(shouldBeEqualToGivenStatus).isFalse()
     }
 
     @Test
-    fun theSameConnectivityObjectsShouldBeEqual() { // given
+    fun theSameConnectivityObjectsShouldBeEqual() {
+    // given
         val connectivityOne = Connectivity()
         val connectivityTwo = Connectivity()
         // when
         val objectsAreEqual = connectivityOne == connectivityTwo
         // then
-        Truth.assertThat(objectsAreEqual).isTrue()
+        assertThat(objectsAreEqual).isTrue()
     }
 
     @Test
-    fun twoDefaultObjectsShouldBeInTheSameBucket() { // given
+    fun twoDefaultObjectsShouldBeInTheSameBucket() {
+    // given
         val connectivityOne = Connectivity()
         val connectivityTwo = Connectivity()
         // when
         val hashCodesAreEqual = connectivityOne.hashCode() == connectivityTwo.hashCode()
         // then
-        Truth.assertThat(hashCodesAreEqual).isTrue()
+        assertThat(hashCodesAreEqual).isTrue()
     }
 
     @Test
-    fun shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicate() { // given
+    fun shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicate() {
+    // given
         val types =
             intArrayOf(ConnectivityManager.TYPE_MOBILE, ConnectivityManager.TYPE_WIFI)
         val expectedOutputTypes = intArrayOf(
@@ -170,21 +179,23 @@ class ConnectivityTest {
         val outputTypes =
             appendUnknownNetworkTypeToTypes(types)
         // then
-        Truth.assertThat(outputTypes).isEqualTo(expectedOutputTypes)
+        assertThat(outputTypes).isEqualTo(expectedOutputTypes)
     }
 
     @Test
-    fun shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicateForEmptyArray() { // given
+    fun shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicateForEmptyArray() {
+    // given
         val types = intArrayOf()
         val expectedOutputTypes = intArrayOf(Connectivity.UNKNOWN_TYPE)
         // when
         val outputTypes = appendUnknownNetworkTypeToTypes(types)
         // then
-        Truth.assertThat(outputTypes).isEqualTo(expectedOutputTypes)
+        assertThat(outputTypes).isEqualTo(expectedOutputTypes)
     }
 
     @Test
-    fun shouldCreateConnectivityWithBuilder() { // given
+    fun shouldCreateConnectivityWithBuilder() {
+    // given
         val state = NetworkInfo.State.CONNECTED
         val detailedState = DetailedState.CONNECTED
         val type = ConnectivityManager.TYPE_WIFI
@@ -207,21 +218,22 @@ class ConnectivityTest {
             extraInfo=extraInfo)
 
         // then
-        Truth.assertThat(connectivity.state).isEqualTo(state)
-        Truth.assertThat(connectivity.detailedState).isEqualTo(detailedState)
-        Truth.assertThat(connectivity.type).isEqualTo(type)
-        Truth.assertThat(connectivity.subType).isEqualTo(subType)
-        Truth.assertThat(connectivity.available).isTrue()
-        Truth.assertThat(connectivity.failover).isFalse()
-        Truth.assertThat(connectivity.roaming).isTrue()
-        Truth.assertThat(connectivity.typeName).isEqualTo(typeName)
-        Truth.assertThat(connectivity.subTypeName).isEqualTo(subTypeName)
-        Truth.assertThat(connectivity.reason).isEqualTo(reason)
-        Truth.assertThat(connectivity.extraInfo).isEqualTo(extraInfo)
+        assertThat(connectivity.state).isEqualTo(state)
+        assertThat(connectivity.detailedState).isEqualTo(detailedState)
+        assertThat(connectivity.type).isEqualTo(type)
+        assertThat(connectivity.subType).isEqualTo(subType)
+        assertThat(connectivity.available).isTrue()
+        assertThat(connectivity.failover).isFalse()
+        assertThat(connectivity.roaming).isTrue()
+        assertThat(connectivity.typeName).isEqualTo(typeName)
+        assertThat(connectivity.subTypeName).isEqualTo(subTypeName)
+        assertThat(connectivity.reason).isEqualTo(reason)
+        assertThat(connectivity.extraInfo).isEqualTo(extraInfo)
     }
 
     @Test
-    fun connectivityShouldNotBeEqualToAnotherOne() { // given
+    fun connectivityShouldNotBeEqualToAnotherOne() {
+    // given
         val connectivityOne = Connectivity(state=NetworkInfo.State.CONNECTED,
             detailedState=DetailedState.CONNECTED,
             type=ConnectivityManager.TYPE_WIFI,
@@ -248,31 +260,32 @@ class ConnectivityTest {
         // when
         val isAnotherConnectivityTheSame = connectivityOne == connectivityTwo
         // then
-        Truth.assertThat(isAnotherConnectivityTheSame).isFalse()
+        assertThat(isAnotherConnectivityTheSame).isFalse()
     }
 
     @Test
-    fun shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() { // given
+    fun shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
+    // given
         val context = ApplicationProvider.getApplicationContext<Context>()
         val connectivityManager: ConnectivityManager? = null
         // when
         val connectivity = create(context, connectivityManager)
         // then
-        Truth.assertThat(connectivity.type).isEqualTo(Connectivity.UNKNOWN_TYPE)
-        Truth.assertThat(connectivity.subType).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE)
-        Truth.assertThat(connectivity.state)
+        assertThat(connectivity.type).isEqualTo(Connectivity.UNKNOWN_TYPE)
+        assertThat(connectivity.subType).isEqualTo(Connectivity.UNKNOWN_SUB_TYPE)
+        assertThat(connectivity.state)
             .isEqualTo(NetworkInfo.State.DISCONNECTED)
-        Truth.assertThat(connectivity.detailedState)
+        assertThat(connectivity.detailedState)
             .isEqualTo(DetailedState.IDLE)
-        Truth.assertThat(connectivity.available).isFalse()
-        Truth.assertThat(connectivity.failover).isFalse()
-        Truth.assertThat(connectivity.roaming).isFalse()
-        Truth.assertThat(connectivity.typeName)
+        assertThat(connectivity.available).isFalse()
+        assertThat(connectivity.failover).isFalse()
+        assertThat(connectivity.roaming).isFalse()
+        assertThat(connectivity.typeName)
             .isEqualTo(TYPE_NAME_NONE)
-        Truth.assertThat(connectivity.subTypeName)
+        assertThat(connectivity.subTypeName)
             .isEqualTo(TYPE_NAME_NONE)
-        Truth.assertThat(connectivity.reason).isEmpty()
-        Truth.assertThat(connectivity.extraInfo).isEmpty()
+        assertThat(connectivity.reason).isEmpty()
+        assertThat(connectivity.extraInfo).isEmpty()
     }
 
     companion object {

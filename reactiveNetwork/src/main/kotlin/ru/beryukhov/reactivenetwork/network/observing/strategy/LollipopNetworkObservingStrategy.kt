@@ -7,7 +7,7 @@ import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.net.NetworkRequest
 import android.util.Log
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -22,11 +22,11 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
  * Uses Network Callback API.
  */
 @TargetApi(21)
-class LollipopNetworkObservingStrategy : NetworkObservingStrategy {
+public class LollipopNetworkObservingStrategy : NetworkObservingStrategy {
     // it has to be initialized in the Observable due to Context
     private lateinit var networkCallback: NetworkCallback
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     override fun observeNetworkConnectivity(context: Context): Flow<Connectivity> {
         val service = Context.CONNECTIVITY_SERVICE
         val manager = context.getSystemService(service) as ConnectivityManager

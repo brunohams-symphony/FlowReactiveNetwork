@@ -13,7 +13,8 @@ open class DefaultErrorHandlerTest {
     private val handler = spyk(DefaultErrorHandler())
 
     @Test
-    fun shouldHandleErrorDuringClosingSocket() { // given
+    fun shouldHandleErrorDuringClosingSocket() { 
+    // given
         val errorMsg = "Could not close the socket"
         val exception = Exception(errorMsg)
         // when

@@ -4,14 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.net.NetworkInfo
 import androidx.test.core.app.ApplicationProvider
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Ignore
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -23,39 +23,24 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
 @RunWith(RobolectricTestRunner::class)
 open class PreLollipopNetworkObservingStrategyTest {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    //@OptIn(ExperimentalCoroutinesApi::class)
     @Ignore
     @Test
-    fun shouldObserveConnectivity() { // given
+    fun shouldObserveConnectivity() = runTest {
+        // given
         val strategy: NetworkObservingStrategy = PreLollipopNetworkObservingStrategy()
         val context = ApplicationProvider.getApplicationContext<Context>()
         // when
-        runBlockingTest {
-            val testFlow =
-                strategy.observeNetworkConnectivity(context).map { it.state }.testIn(scope = this)
-            advanceTimeBy(1000)
+        strategy.observeNetworkConnectivity(context).map { it.state }.test {
+            delay(1000)
             // then
-            testFlow expect emission(index = 0, expected = NetworkInfo.State.CONNECTED)
-
+            assertThat(awaitItem()).isEqualTo(NetworkInfo.State.CONNECTED)
         }
     }
 
-    //Rx specific test
-    /*@Test
-    fun shouldStopObservingConnectivity() { // given
-        val strategy: NetworkObservingStrategy = PreLollipopNetworkObservingStrategy()
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val observable: Observable<Connectivity> = strategy.observeNetworkConnectivity(context)
-        val observer: TestObserver<Connectivity> = TestObserver()
-        // when
-        observable.subscribe(observer)
-        observer.dispose()
-        // then
-        assertThat(observer.isDisposed()).isTrue()
-    }*/
-
     @Test
-    fun shouldCallOnError() { // given
+    fun shouldCallOnError() {
+        // given
         val message = "error message"
         val exception = Exception()
         val strategy = spyk(PreLollipopNetworkObservingStrategy())
@@ -66,7 +51,8 @@ open class PreLollipopNetworkObservingStrategyTest {
     }
 
     @Test
-    fun shouldTryToUnregisterReceiver() { // given
+    fun shouldTryToUnregisterReceiver() {
+        // given
         val strategy = PreLollipopNetworkObservingStrategy()
         val context = spyk(ApplicationProvider.getApplicationContext())
         val broadcastReceiver = mockk<BroadcastReceiver>(relaxed = true)
@@ -76,21 +62,20 @@ open class PreLollipopNetworkObservingStrategyTest {
         verify { context.unregisterReceiver(broadcastReceiver) }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    //@OptIn(ExperimentalCoroutinesApi::class)
     @Ignore
     @Test
-    fun shouldTryToUnregisterReceiverAfterDispose() { // given
+    fun shouldTryToUnregisterReceiverAfterDispose() = runTest {
+        // given
         val context = ApplicationProvider.getApplicationContext<Context>()
         val strategy = spyk(PreLollipopNetworkObservingStrategy())
         // when
-        runBlockingTest {
 
-            val testFlow = strategy.observeNetworkConnectivity(context).testIn(scope = this)
-            this.cancel()
-
-            // then
-            verify { strategy.tryToUnregisterReceiver(context, any()) }
-
+        strategy.observeNetworkConnectivity(context).test {
+            cancel()
         }
+        // then
+        verify { strategy.tryToUnregisterReceiver(context, any()) }
     }
 }
+

@@ -15,7 +15,7 @@ import ru.beryukhov.reactivenetwork.tickerFlow
  * Socket strategy for monitoring connectivity with the Internet.
  * It monitors Internet connectivity via opening socket connection with the remote host.
  */
-class SocketInternetObservingStrategy : InternetObservingStrategy {
+public class SocketInternetObservingStrategy : InternetObservingStrategy {
     override fun getDefaultPingHost(): String {
         return DEFAULT_HOST
     }
@@ -147,7 +147,7 @@ class SocketInternetObservingStrategy : InternetObservingStrategy {
         }
     }
 
-    companion object {
+    private companion object {
         private const val EMPTY_STRING = ""
         private const val DEFAULT_HOST = "www.google.com"
         private const val HTTP_PROTOCOL = "http://"

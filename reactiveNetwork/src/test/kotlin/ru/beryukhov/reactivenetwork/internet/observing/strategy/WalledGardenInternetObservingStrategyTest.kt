@@ -1,26 +1,21 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
-import com.google.common.truth.Truth
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import java.io.IOException
 import java.net.HttpURLConnection
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import ru.beryukhov.reactivenetwork.base.BaseFlowTest
-import ru.beryukhov.reactivenetwork.base.testIn
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 
-@Config(manifest = Config.NONE)
-@RunWith(
-    RobolectricTestRunner::class
-)
-class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
+@RunWith(RobolectricTestRunner::class)
+class WalledGardenInternetObservingStrategyTest {
 
     private val errorHandler = mockk<ErrorHandler>(relaxed = true)
     private val strategy = spyk(WalledGardenInternetObservingStrategy())
@@ -28,7 +23,8 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
     private val host: String = strategy.getDefaultPingHost()
 
     @Test
-    fun shouldBeConnectedToTheInternet() { // given
+    fun shouldBeConnectedToTheInternet() = runTest {
+        // given
         val errorHandlerStub = createErrorHandlerStub()
         every {
             strategy.isConnected(
@@ -41,24 +37,25 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
         } returns true
 
         // when
-        runBlocking {
-            val testFlow = strategy.observeInternetConnectivity(
-                INITIAL_INTERVAL_IN_MS,
-                INTERVAL_IN_MS,
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                HTTP_RESPONSE,
-                errorHandlerStub
-            )
+        strategy.observeInternetConnectivity(
+            INITIAL_INTERVAL_IN_MS,
+            INTERVAL_IN_MS,
+            host,
+            PORT,
+            TIMEOUT_IN_MS,
+            HTTP_RESPONSE,
+            errorHandlerStub
+        ).test {
+
 
             // then
-            testFlow.expectFirst(true)
+            assertThat(awaitItem()).isEqualTo(true)
         }
     }
 
     @Test
-    fun shouldNotBeConnectedToTheInternet() { // given
+    fun shouldNotBeConnectedToTheInternet() = runTest {
+        // given
         val errorHandlerStub =
             createErrorHandlerStub()
         every {
@@ -71,24 +68,24 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
             )
         } returns false
         // when
-        runBlocking {
-            val testFlow = strategy.observeInternetConnectivity(
-                INITIAL_INTERVAL_IN_MS,
-                INTERVAL_IN_MS,
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                HTTP_RESPONSE,
-                errorHandlerStub
-            )
+        strategy.observeInternetConnectivity(
+            INITIAL_INTERVAL_IN_MS,
+            INTERVAL_IN_MS,
+            host,
+            PORT,
+            TIMEOUT_IN_MS,
+            HTTP_RESPONSE,
+            errorHandlerStub
+        ).test {
 
             // then
-            testFlow.expectFirst(false)
+            assertThat(awaitItem()).isEqualTo(false)
         }
     }
 
     @Test
-    fun shouldBeConnectedToTheInternetViaSingle() { // given
+    fun shouldBeConnectedToTheInternetViaSingle() = runTest {
+        // given
         val errorHandlerStub = createErrorHandlerStub()
         every {
             strategy.isConnected(
@@ -100,22 +97,21 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
             )
         } returns true
 
-        runBlocking {
-            // when
-            val isConnected = strategy.checkInternetConnectivity(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                HTTP_RESPONSE,
-                errorHandlerStub
-            )
-            // then
-            Truth.assertThat(isConnected).isTrue()
-        }
+        // when
+        val isConnected = strategy.checkInternetConnectivity(
+            host,
+            PORT,
+            TIMEOUT_IN_MS,
+            HTTP_RESPONSE,
+            errorHandlerStub
+        )
+        // then
+        assertThat(isConnected).isTrue()
     }
 
     @Test
-    fun shouldNotBeConnectedToTheInternetViaSingle() { // given
+    fun shouldNotBeConnectedToTheInternetViaSingle() = runTest {
+        // given
         val errorHandlerStub =
             createErrorHandlerStub()
         every {
@@ -127,23 +123,22 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
                 errorHandlerStub
             )
         } returns false
-        runBlocking {
-            // when
-            val isConnected = strategy.checkInternetConnectivity(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                HTTP_RESPONSE,
-                errorHandlerStub
-            )
-            // then
-            Truth.assertThat(isConnected).isFalse()
-        }
+        // when
+        val isConnected = strategy.checkInternetConnectivity(
+            host,
+            PORT,
+            TIMEOUT_IN_MS,
+            HTTP_RESPONSE,
+            errorHandlerStub
+        )
+        // then
+        assertThat(isConnected).isFalse()
     }
 
     @Test
     @Throws(IOException::class)
-    fun shouldCreateHttpUrlConnection() { // given
+    fun shouldCreateHttpUrlConnection() {
+        // given
         val parsedDefaultHost = "clients3.google.com"
         // when
         val connection = strategy.createHttpUrlConnection(
@@ -152,21 +147,19 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
             TIMEOUT_IN_MS
         )
         // then
-        Truth.assertThat(connection).isNotNull()
-        Truth.assertThat(connection.url.host).isEqualTo(parsedDefaultHost)
-        Truth.assertThat(connection.url.port)
-            .isEqualTo(PORT)
-        Truth.assertThat(connection.connectTimeout)
-            .isEqualTo(TIMEOUT_IN_MS)
-        Truth.assertThat(connection.readTimeout)
-            .isEqualTo(TIMEOUT_IN_MS)
-        Truth.assertThat(connection.instanceFollowRedirects).isFalse()
-        Truth.assertThat(connection.useCaches).isFalse()
+        assertThat(connection).isNotNull()
+        assertThat(connection.url.host).isEqualTo(parsedDefaultHost)
+        assertThat(connection.url.port).isEqualTo(PORT)
+        assertThat(connection.connectTimeout).isEqualTo(TIMEOUT_IN_MS)
+        assertThat(connection.readTimeout).isEqualTo(TIMEOUT_IN_MS)
+        assertThat(connection.instanceFollowRedirects).isFalse()
+        assertThat(connection.useCaches).isFalse()
     }
 
     @Test
     @Throws(IOException::class)
-    fun shouldHandleAnExceptionWhileCreatingHttpUrlConnection() { // given
+    fun shouldHandleAnExceptionWhileCreatingHttpUrlConnection() {
+        // given
         val errorMsg = "Could not establish connection with WalledGardenStrategy"
         val givenException = IOException(errorMsg)
         every {
@@ -190,7 +183,8 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
 
     @Test
     @Throws(IOException::class)
-    fun shouldCreateHttpsUrlConnection() { // given
+    fun shouldCreateHttpsUrlConnection() {
+        // given
         val parsedDefaultHost = "clients3.google.com"
         // when
         val connection: HttpURLConnection = strategy.createHttpsUrlConnection(
@@ -199,21 +193,19 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
             TIMEOUT_IN_MS
         )
         // then
-        Truth.assertThat(connection).isNotNull()
-        Truth.assertThat(connection.url.host).isEqualTo(parsedDefaultHost)
-        Truth.assertThat(connection.url.port)
-            .isEqualTo(PORT)
-        Truth.assertThat(connection.connectTimeout)
-            .isEqualTo(TIMEOUT_IN_MS)
-        Truth.assertThat(connection.readTimeout)
-            .isEqualTo(TIMEOUT_IN_MS)
-        Truth.assertThat(connection.instanceFollowRedirects).isFalse()
-        Truth.assertThat(connection.useCaches).isFalse()
+        assertThat(connection).isNotNull()
+        assertThat(connection.url.host).isEqualTo(parsedDefaultHost)
+        assertThat(connection.url.port).isEqualTo(PORT)
+        assertThat(connection.connectTimeout).isEqualTo(TIMEOUT_IN_MS)
+        assertThat(connection.readTimeout).isEqualTo(TIMEOUT_IN_MS)
+        assertThat(connection.instanceFollowRedirects).isFalse()
+        assertThat(connection.useCaches).isFalse()
     }
 
     @Test
     @Throws(IOException::class)
-    fun shouldHandleAnExceptionWhileCreatingHttpsUrlConnection() { // given
+    fun shouldHandleAnExceptionWhileCreatingHttpsUrlConnection() {
+        // given
         val errorMsg = "Could not establish connection with WalledGardenStrategy"
         val givenException = IOException(errorMsg)
         val host = "https://clients3.google.com"
@@ -240,14 +232,14 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
     fun shouldNotTransformHttpHost() { // when
         val transformedHost = strategy.adjustHost(HOST_WITH_HTTPS)
         // then
-        Truth.assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS)
+        assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS)
     }
 
     @Test
     fun shouldNotTransformHttpsHost() { // when
         val transformedHost = strategy.adjustHost(HOST_WITH_HTTPS)
         // then
-        Truth.assertThat(transformedHost)
+        assertThat(transformedHost)
             .isEqualTo(HOST_WITH_HTTPS)
     }
 
@@ -255,11 +247,12 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
     fun shouldAddHttpsProtocolToHost() { // when
         val transformedHost = strategy.adjustHost(HOST_WITHOUT_HTTPS)
         // then
-        Truth.assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS)
+        assertThat(transformedHost).isEqualTo(HOST_WITH_HTTPS)
     }
 
     @Test
-    fun shouldAdjustHostWhileCheckingConnectivity() { // given
+    fun shouldAdjustHostWhileCheckingConnectivity() = runTest {
+        // given
         val errorHandlerStub =
             createErrorHandlerStub()
         val host = host
@@ -283,7 +276,7 @@ class WalledGardenInternetObservingStrategyTest : BaseFlowTest() {
             TIMEOUT_IN_MS,
             HTTP_RESPONSE,
             errorHandlerStub
-        ).testIn(scope = testScopeRule)
+        ).test{}
         // then
         verify { strategy.adjustHost(host) }
 

@@ -1,6 +1,6 @@
 package ru.beryukhov.reactivenetwork.internet.observing
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -17,27 +17,28 @@ class InternetObservingSettingsTest {
     fun shouldCreateSettings() { // when
         val settings = create()
         // then
-        Truth.assertThat(settings).isNotNull()
+        assertThat(settings).isNotNull()
     }
 
     @Test
     fun shouldBuildSettingsWithDefaultValues() { // when
         val settings = create()
         // then
-        Truth.assertThat(settings.initialInterval()).isEqualTo(0)
-        Truth.assertThat(settings.interval()).isEqualTo(2000)
-        Truth.assertThat(settings.host()).isEqualTo("http://clients3.google.com/generate_204")
-        Truth.assertThat(settings.port()).isEqualTo(80)
-        Truth.assertThat(settings.timeout()).isEqualTo(2000)
-        Truth.assertThat(settings.httpResponse()).isEqualTo(204)
-        Truth.assertThat(settings.errorHandler())
+        assertThat(settings.initialInterval()).isEqualTo(0)
+        assertThat(settings.interval()).isEqualTo(2000)
+        assertThat(settings.host()).isEqualTo("http://clients3.google.com/generate_204")
+        assertThat(settings.port()).isEqualTo(80)
+        assertThat(settings.timeout()).isEqualTo(2000)
+        assertThat(settings.httpResponse()).isEqualTo(204)
+        assertThat(settings.errorHandler())
             .isInstanceOf(DefaultErrorHandler::class.java)
-        Truth.assertThat(settings.strategy())
+        assertThat(settings.strategy())
             .isInstanceOf(WalledGardenInternetObservingStrategy::class.java)
     }
 
     @Test
-    fun shouldBuildSettings() { // given
+    fun shouldBuildSettings() { 
+    // given
         val initialInterval = 1
         val interval = 2
         val host = "www.test.com"
@@ -59,16 +60,16 @@ class InternetObservingSettingsTest {
             .strategy(strategy)
             .build()
         // then
-        Truth.assertThat(settings.initialInterval()).isEqualTo(initialInterval)
-        Truth.assertThat(settings.interval()).isEqualTo(interval)
-        Truth.assertThat(settings.host()).isEqualTo(host)
-        Truth.assertThat(settings.port()).isEqualTo(port)
-        Truth.assertThat(settings.timeout()).isEqualTo(timeout)
-        Truth.assertThat(settings.httpResponse()).isEqualTo(httpResponse)
-        Truth.assertThat(settings.errorHandler()).isNotNull()
-        Truth.assertThat(settings.errorHandler())
+        assertThat(settings.initialInterval()).isEqualTo(initialInterval)
+        assertThat(settings.interval()).isEqualTo(interval)
+        assertThat(settings.host()).isEqualTo(host)
+        assertThat(settings.port()).isEqualTo(port)
+        assertThat(settings.timeout()).isEqualTo(timeout)
+        assertThat(settings.httpResponse()).isEqualTo(httpResponse)
+        assertThat(settings.errorHandler()).isNotNull()
+        assertThat(settings.errorHandler())
             .isNotInstanceOf(DefaultErrorHandler::class.java)
-        Truth.assertThat(settings.strategy())
+        assertThat(settings.strategy())
             .isInstanceOf(SocketInternetObservingStrategy::class.java)
     }
 

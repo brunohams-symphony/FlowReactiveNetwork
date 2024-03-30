@@ -7,7 +7,7 @@ import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
  * Internet observing strategy allows to implement different strategies for monitoring connectivity
  * with the Internet.
  */
-interface InternetObservingStrategy {
+public interface InternetObservingStrategy {
     /**
      * Observes connectivity with the Internet by opening socket connection with remote host in a
      * given interval infinitely
@@ -22,7 +22,7 @@ interface InternetObservingStrategy {
      * @return Flow with Boolean - true, when we have connection with host and false if
      * not
      */
-    fun observeInternetConnectivity(
+    public fun observeInternetConnectivity(
         initialIntervalInMs: Int,
         intervalInMs: Int,
         host: String,
@@ -42,7 +42,7 @@ interface InternetObservingStrategy {
      * @return  Boolean - true, when we have connection with host and false if
      * not
      */
-    suspend fun checkInternetConnectivity(
+    public suspend fun checkInternetConnectivity(
         host: String, port: Int,
         timeoutInMs: Int, httpResponse: Int, errorHandler: ErrorHandler
     ): Boolean
@@ -52,5 +52,5 @@ interface InternetObservingStrategy {
      *
      * @return String with a ping host used in the current strategy
      */
-    fun getDefaultPingHost(): String
+    public fun getDefaultPingHost(): String
 }

@@ -8,7 +8,7 @@ import android.net.NetworkInfo.DetailedState
 /**
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
  */
-data class Connectivity(
+public data class Connectivity(
     val state : NetworkInfo.State = NetworkInfo.State.DISCONNECTED,
     val detailedState : DetailedState? = DetailedState.IDLE,
     val type : Int = UNKNOWN_TYPE,
@@ -21,11 +21,11 @@ data class Connectivity(
     val reason : String? = "",
     val extraInfo : String? = ""
 ){
-    companion object {
-        const val UNKNOWN_TYPE = -1
-        const val UNKNOWN_SUB_TYPE = -1
+    public companion object {
+        public const val UNKNOWN_TYPE: Int = -1
+        public const val UNKNOWN_SUB_TYPE: Int = -1
 
-        fun create(context: Context): Connectivity {
+        public fun create(context: Context): Connectivity {
             Preconditions.checkNotNull(context, "context == null")
             return create(
                 context,

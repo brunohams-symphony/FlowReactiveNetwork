@@ -1,6 +1,6 @@
 package ru.beryukhov.reactivenetwork
 
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -17,28 +17,28 @@ class PreconditionsTest {
     @Config(sdk = [21])
     fun shouldBeAtLeastAndroidLollipop() {
         val isAtLeastAndroidLollipop = isAtLeastAndroidLollipop()
-        Truth.assertThat(isAtLeastAndroidLollipop).isTrue()
+        assertThat(isAtLeastAndroidLollipop).isTrue()
     }
 
     @Test
     @Config(sdk = [22])
     fun shouldBeAtLeastAndroidLollipopForHigherApi() {
         val isAtLeastAndroidLollipop = isAtLeastAndroidLollipop()
-        Truth.assertThat(isAtLeastAndroidLollipop).isTrue()
+        assertThat(isAtLeastAndroidLollipop).isTrue()
     }
 
     @Test
     @Config(sdk = [22])
     fun shouldNotBeAtLeastAndroidMarshmallowForLowerApi() {
         val isAtLeastAndroidMarshmallow = isAtLeastAndroidMarshmallow()
-        Truth.assertThat(isAtLeastAndroidMarshmallow).isFalse()
+        assertThat(isAtLeastAndroidMarshmallow).isFalse()
     }
 
     @Test
     @Config(sdk = [23])
     fun shouldBeAtLeastAndroidMarshmallow() {
         val isAtLeastAndroidMarshmallow = isAtLeastAndroidMarshmallow()
-        Truth.assertThat(isAtLeastAndroidMarshmallow).isTrue()
+        assertThat(isAtLeastAndroidMarshmallow).isTrue()
     }
 
     @Test(expected = IllegalArgumentException::class)

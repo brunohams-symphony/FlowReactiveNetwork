@@ -6,7 +6,7 @@ import android.net.NetworkInfo
  * ConnectivityPredicate is a class containing predefined methods, which can be used for filtering
  * reactive streams of network connectivity
  */
-object ConnectivityPredicate {
+public object ConnectivityPredicate {
     /**
      * Filter, which returns true if at least one given state occurred
      *
@@ -14,7 +14,7 @@ object ConnectivityPredicate {
      * @return true if at least one given state occurred
      */
     @JvmStatic
-    fun hasState(vararg states: NetworkInfo.State): Predicate<Connectivity> {
+    public fun hasState(vararg states: NetworkInfo.State): Predicate<Connectivity> {
         return object : Predicate<Connectivity> {
             @Throws(Exception::class)
             override fun test(connectivity: Connectivity): Boolean {
@@ -35,7 +35,7 @@ object ConnectivityPredicate {
      * @return true if at least one given type occurred
      */
     @JvmStatic
-    fun hasType(vararg types: Int): Predicate<Connectivity> {
+    public fun hasType(vararg types: Int): Predicate<Connectivity> {
         val extendedTypes =
             appendUnknownNetworkTypeToTypes(types)
         return object : Predicate<Connectivity> {
@@ -60,7 +60,7 @@ object ConnectivityPredicate {
      * @return types of the network with unknown type as an array of ints
      */
     @JvmStatic
-    fun appendUnknownNetworkTypeToTypes(types: IntArray): IntArray {
+    public fun appendUnknownNetworkTypeToTypes(types: IntArray): IntArray {
         var i = 0
         val extendedTypes = IntArray(types.size + 1)
         for (type in types) {

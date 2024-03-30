@@ -19,7 +19,7 @@ import ru.beryukhov.reactivenetwork.tickerFlow
  * are generated. Instead HTTP 200 (OK), we got HTTP 204 (NO CONTENT), but it still can tell us
  * if a device is connected to the Internet or not.
  */
-class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
+public class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
     override fun getDefaultPingHost(): String {
         return DEFAULT_HOST
     }
@@ -164,7 +164,7 @@ class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
         return urlConnection
     }
 
-    companion object {
+    private companion object {
         private const val DEFAULT_HOST = "http://clients3.google.com/generate_204"
         private const val HTTP_PROTOCOL = "http://"
         private const val HTTPS_PROTOCOL = "https://"

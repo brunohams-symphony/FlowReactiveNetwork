@@ -41,13 +41,12 @@ dependencies {
     implementation(libs.androidx.annotation)
 
 
-    testImplementation(libs.kotlinTest.common)
-    testImplementation(libs.kotlinTest.annotations)
-
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.truth)
     testImplementation(libs.robolectric)
     testImplementation(libs.mockk)
-
+    testImplementation(libs.turbine)
     testImplementation(libs.androidx.test)
 }
 
