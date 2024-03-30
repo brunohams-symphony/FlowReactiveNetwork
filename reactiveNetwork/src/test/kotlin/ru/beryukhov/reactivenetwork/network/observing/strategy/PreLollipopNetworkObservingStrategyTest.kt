@@ -23,8 +23,6 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
 @RunWith(RobolectricTestRunner::class)
 open class PreLollipopNetworkObservingStrategyTest {
 
-    //@OptIn(ExperimentalCoroutinesApi::class)
-    @Ignore
     @Test
     fun shouldObserveConnectivity() = runTest {
         // given
@@ -62,8 +60,6 @@ open class PreLollipopNetworkObservingStrategyTest {
         verify { context.unregisterReceiver(broadcastReceiver) }
     }
 
-    //@OptIn(ExperimentalCoroutinesApi::class)
-    @Ignore
     @Test
     fun shouldTryToUnregisterReceiverAfterDispose() = runTest {
         // given
@@ -72,10 +68,9 @@ open class PreLollipopNetworkObservingStrategyTest {
         // when
 
         strategy.observeNetworkConnectivity(context).test {
-            cancel()
+            cancelAndConsumeRemainingEvents()
         }
         // then
         verify { strategy.tryToUnregisterReceiver(context, any()) }
     }
 }
-

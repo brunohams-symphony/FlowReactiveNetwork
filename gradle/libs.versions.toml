@@ -27,7 +27,7 @@ material = "com.google.android.material:material:1.11.0"
 
 truth = "com.google.truth:truth:1.0.1"
 robolectric = "org.robolectric:robolectric:4.12"
-mockk = "io.mockk:mockk:1.10.0"
+mockk = "io.mockk:mockk:1.13.10" # https://github.com/mockk/mockk
 turbine = "app.cash.turbine:turbine:1.1.0"
 
 androidx-annotation = "androidx.annotation:annotation:1.7.1" # https://mvnrepository.com/artifact/androidx.annotation/annotation

@@ -24,57 +24,57 @@ class SocketInternetObservingStrategyTest {
 
     private val host: String = strategy.getDefaultPingHost()
 
-    //    @Ignore
+    
     @Test
     fun shouldBeConnectedToTheInternet() = runTest {
         // given
         every {
             strategy.isConnected(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                errorHandler
+                host = host,
+                port = PORT,
+                timeoutInMs = TIMEOUT_IN_MS,
+                errorHandler = errorHandler
             )
         } returns true
 
         // when
 
         strategy.observeInternetConnectivity(
-            INITIAL_INTERVAL_IN_MS,
-            INTERVAL_IN_MS,
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            HTTP_RESPONSE,
-            errorHandler
+            initialIntervalInMs = INITIAL_INTERVAL_IN_MS,
+            intervalInMs = INTERVAL_IN_MS,
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            httpResponse = HTTP_RESPONSE,
+            errorHandler = errorHandler
         ).test {
             // then
             assertThat(awaitItem()).isEqualTo(true)
         }
     }
 
-    //    @Ignore
+    
     @Test
     fun shouldNotBeConnectedToTheInternet() = runTest {
         // given
         every {
             strategy.isConnected(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                errorHandler
+                host = host,
+                port = PORT,
+                timeoutInMs = TIMEOUT_IN_MS,
+                errorHandler = errorHandler
             )
         } returns false
         // when
 
         strategy.observeInternetConnectivity(
-            INITIAL_INTERVAL_IN_MS,
-            INTERVAL_IN_MS,
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            HTTP_RESPONSE,
-            errorHandler
+            initialIntervalInMs = INITIAL_INTERVAL_IN_MS,
+            intervalInMs = INTERVAL_IN_MS,
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            httpResponse = HTTP_RESPONSE,
+            errorHandler = errorHandler
         ).test {
             // then
             assertThat(awaitItem()).isEqualTo(false)
@@ -93,11 +93,11 @@ class SocketInternetObservingStrategyTest {
 
         // when
         val isConnected = strategy.isConnected(
-            socket,
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            errorHandler
+            socket = socket,
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            errorHandler = errorHandler
         )
         // then
         assertThat(isConnected).isFalse()
@@ -113,11 +113,11 @@ class SocketInternetObservingStrategyTest {
 
         // when
         strategy.isConnected(
-            socket,
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            errorHandler
+            socket = socket,
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            errorHandler = errorHandler
         )
         // then
         verify(exactly = 1) { errorHandler.handleError(givenException, errorMsg) }
@@ -128,19 +128,19 @@ class SocketInternetObservingStrategyTest {
         // given
         every {
             strategy.isConnected(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                errorHandler
+                host = host,
+                port = PORT,
+                timeoutInMs = TIMEOUT_IN_MS,
+                errorHandler = errorHandler
             )
         } returns true
         // when
         val isConnected = strategy.checkInternetConnectivity(
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            HTTP_RESPONSE,
-            errorHandler
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            httpResponse = HTTP_RESPONSE,
+            errorHandler = errorHandler
         )
         // then
         assertThat(isConnected).isTrue()
@@ -152,19 +152,19 @@ class SocketInternetObservingStrategyTest {
         // given
         every {
             strategy.isConnected(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                errorHandler
+                host = host,
+                port = PORT,
+                timeoutInMs = TIMEOUT_IN_MS,
+                errorHandler = errorHandler
             )
         } returns false
         // when
         val isConnected = strategy.checkInternetConnectivity(
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            HTTP_RESPONSE,
-            errorHandler
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            httpResponse = HTTP_RESPONSE,
+            errorHandler = errorHandler
         )
         // then
         assertThat(isConnected).isFalse()
@@ -203,24 +203,26 @@ class SocketInternetObservingStrategyTest {
         val host = host
         every {
             strategy.isConnected(
-                host,
-                PORT,
-                TIMEOUT_IN_MS,
-                errorHandler
+                host = host,
+                port = PORT,
+                timeoutInMs = TIMEOUT_IN_MS,
+                errorHandler = errorHandler
             )
         } returns true
 
         // when
 
         strategy.observeInternetConnectivity(
-            INITIAL_INTERVAL_IN_MS,
-            INTERVAL_IN_MS,
-            host,
-            PORT,
-            TIMEOUT_IN_MS,
-            HTTP_RESPONSE,
-            errorHandler
-        ).test {}
+            initialIntervalInMs = INITIAL_INTERVAL_IN_MS,
+            intervalInMs = INTERVAL_IN_MS,
+            host = host,
+            port = PORT,
+            timeoutInMs = TIMEOUT_IN_MS,
+            httpResponse = HTTP_RESPONSE,
+            errorHandler = errorHandler
+        ).test {
+            cancelAndConsumeRemainingEvents()
+        }
         // then
         verify { strategy.adjustHost(host) }
 

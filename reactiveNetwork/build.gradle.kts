@@ -14,8 +14,10 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
     }
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_17
-        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
     }
 
     buildTypes {

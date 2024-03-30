@@ -16,11 +16,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -71,28 +69,25 @@ open class MarshmallowNetworkObservingStrategyTest {
         verify(exactly = 1) { strategy.onError(message, exception) }
     }
 
-    //    @OptIn(ExperimentalCoroutinesApi::class)
-    @Ignore
     @Test
     fun shouldTryToUnregisterCallbackOnDispose() = runTest {
         // given
         // when
-        strategy.observeNetworkConnectivity(context).test {}
-        this.cancel()
+        strategy.observeNetworkConnectivity(context).test {
+            cancelAndConsumeRemainingEvents()
+        }
 
         // then
         verify { strategy.tryToUnregisterCallback(any()) }
     }
 
-
-    //    @OptIn(ExperimentalCoroutinesApi::class)
-    @Ignore
     @Test
     fun shouldTryToUnregisterReceiverOnDispose() = runTest {
         // given
         // when
-        strategy.observeNetworkConnectivity(context).test {}
-        this.cancel()
+        strategy.observeNetworkConnectivity(context).test {
+            cancelAndConsumeRemainingEvents()
+        }
 
         // then
         verify { strategy.tryToUnregisterReceiver(context) }
@@ -149,12 +144,14 @@ open class MarshmallowNetworkObservingStrategyTest {
         verify { strategy.onNext(any()) }
     }
 
-//    @Ignore
+
     @Test
     fun shouldReceiveIntentWhenIsNotInIdleMode() { 
     // given
         preparePowerManagerMocks(idleMode = false, ignoreOptimizations = false)
         val broadcastReceiver = strategy.createIdleBroadcastReceiver()
+        every { contextMock.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivityManager
+        every { connectivityManager.activeNetworkInfo } returns null
         // when
         broadcastReceiver.onReceive(contextMock, intent)
         // then
@@ -176,7 +173,9 @@ open class MarshmallowNetworkObservingStrategyTest {
     @Test
     fun shouldCreateNetworkCallbackOnSubscribe() = runTest {
         // when
-        strategy.observeNetworkConnectivity(context).test {}
+        strategy.observeNetworkConnectivity(context).test {
+            cancelAndConsumeRemainingEvents()
+        }
 
         // then
         verify { strategy.createNetworkCallback(context) }
@@ -271,7 +270,7 @@ open class MarshmallowNetworkObservingStrategyTest {
             // then
             assertThat(awaitItem()).isEqualTo(current)
             assertThat(awaitItem()).isEqualTo(last)
-            cancel()
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -293,7 +292,7 @@ open class MarshmallowNetworkObservingStrategyTest {
         strategy.propagateAnyConnectedState(last, current).test {
             // then
             assertThat(awaitItem()).isEqualTo(current)
-
+            awaitComplete()
         }
     }
 
@@ -314,6 +313,7 @@ open class MarshmallowNetworkObservingStrategyTest {
         strategy.propagateAnyConnectedState(last, current).test {
             // then
             assertThat(awaitItem()).isEqualTo(current)
+            awaitComplete()
         }
     }
 
@@ -333,6 +333,7 @@ open class MarshmallowNetworkObservingStrategyTest {
         strategy.propagateAnyConnectedState(last, current).test {
             // then
             assertThat(awaitItem()).isEqualTo(current)
+            awaitComplete()
         }
     }
 
@@ -354,6 +355,8 @@ open class MarshmallowNetworkObservingStrategyTest {
         strategy.propagateAnyConnectedState(last, current).test {
             // then
             assertThat(awaitItem()).isEqualTo(current)
+            awaitComplete()
         }
     }
 }
+

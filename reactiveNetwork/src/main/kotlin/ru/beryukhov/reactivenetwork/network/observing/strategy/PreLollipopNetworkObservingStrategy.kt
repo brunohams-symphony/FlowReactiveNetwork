@@ -12,8 +12,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
 import ru.beryukhov.reactivenetwork.Connectivity
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
 import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
@@ -38,13 +38,9 @@ public class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
             }
             context.registerReceiver(receiver, filter)
             awaitClose {
-                GlobalScope.launch {
-                    withContext(Dispatchers.Main) {
-                        tryToUnregisterReceiver(context, receiver)
-                    }
-                }
+                tryToUnregisterReceiver(context, receiver)
             }
-        }
+        }.onStart { emit(Connectivity.create(context)) }.distinctUntilChanged()
     }
 
     internal fun tryToUnregisterReceiver(
@@ -65,3 +61,4 @@ public class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
         Log.e(ReactiveNetwork.LOG_TAG, message, exception)
     }
 }
+

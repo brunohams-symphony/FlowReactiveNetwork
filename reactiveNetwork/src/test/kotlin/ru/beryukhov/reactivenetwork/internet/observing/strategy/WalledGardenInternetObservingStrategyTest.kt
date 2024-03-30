@@ -276,7 +276,9 @@ class WalledGardenInternetObservingStrategyTest {
             TIMEOUT_IN_MS,
             HTTP_RESPONSE,
             errorHandlerStub
-        ).test{}
+        ).test{
+            cancelAndConsumeRemainingEvents()
+        }
         // then
         verify { strategy.adjustHost(host) }
 

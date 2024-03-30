@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import ru.beryukhov.reactivenetwork.Connectivity
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
@@ -53,7 +54,10 @@ public class MarshmallowNetworkObservingStrategy : NetworkObservingStrategy {
                 tryToUnregisterCallback(manager)
                 tryToUnregisterReceiver(context)
             }
-            .distinctUntilChanged()
+            .onCompletion {
+            tryToUnregisterCallback(manager)
+            tryToUnregisterReceiver(context)
+        }.distinctUntilChanged()
     }
 
     internal fun propagateAnyConnectedState(
@@ -146,3 +150,4 @@ public class MarshmallowNetworkObservingStrategy : NetworkObservingStrategy {
         internal const val ERROR_MSG_RECEIVER: String = "could not unregister receiver"
     }
 }
+

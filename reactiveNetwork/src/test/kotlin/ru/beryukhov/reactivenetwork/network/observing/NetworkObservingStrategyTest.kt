@@ -23,7 +23,7 @@ class NetworkObservingStrategyTest {
         assertThatIsConnected(strategy)
     }
 
-//    @Ignore
+
     @Test
     fun preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
         // given

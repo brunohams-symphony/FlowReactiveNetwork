@@ -23,7 +23,7 @@ public object Preconditions {
      * @param message to be thrown in exception
      */
     public fun checkNotNullOrEmpty(string: String?,  message:String) {
-        if (string == null || string.isEmpty()) {
+        if (string.isNullOrEmpty()) {
             throw IllegalArgumentException(message)
         }
     }
