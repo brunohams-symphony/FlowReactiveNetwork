@@ -19,10 +19,10 @@ android {
 
     buildTypes {
         release {
-            //isMinifyEnabled = false
+            isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -37,8 +37,6 @@ dependencies {
     implementation(projects.reactiveNetwork)
 
     implementation(libs.coroutines.core)
-
-
     implementation(libs.coreKtx)
     implementation(libs.material)
 }

@@ -37,8 +37,8 @@ class InternetObservingSettingsTest {
     }
 
     @Test
-    fun shouldBuildSettings() { 
-    // given
+    fun shouldBuildSettings() {
+        // given
         val initialInterval = 1
         val interval = 2
         val host = "www.test.com"

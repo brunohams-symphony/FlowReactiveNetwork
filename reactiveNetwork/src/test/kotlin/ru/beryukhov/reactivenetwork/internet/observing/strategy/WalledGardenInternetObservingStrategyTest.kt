@@ -6,13 +6,13 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import java.io.IOException
-import java.net.HttpURLConnection
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
+import java.io.IOException
+import java.net.HttpURLConnection
 
 @RunWith(RobolectricTestRunner::class)
 class WalledGardenInternetObservingStrategyTest {
@@ -46,8 +46,6 @@ class WalledGardenInternetObservingStrategyTest {
             HTTP_RESPONSE,
             errorHandlerStub
         ).test {
-
-
             // then
             assertThat(awaitItem()).isEqualTo(true)
         }
@@ -168,7 +166,7 @@ class WalledGardenInternetObservingStrategyTest {
                 PORT,
                 TIMEOUT_IN_MS
             )
-        } throws (givenException)
+        } throws givenException
         // when
         strategy.isConnected(
             HOST_WITH_HTTP,
@@ -215,7 +213,7 @@ class WalledGardenInternetObservingStrategyTest {
                 PORT,
                 TIMEOUT_IN_MS
             )
-        } throws (givenException)
+        } throws givenException
         // when
         strategy.isConnected(
             host,
@@ -276,12 +274,11 @@ class WalledGardenInternetObservingStrategyTest {
             TIMEOUT_IN_MS,
             HTTP_RESPONSE,
             errorHandlerStub
-        ).test{
+        ).test {
             cancelAndConsumeRemainingEvents()
         }
         // then
         verify { strategy.adjustHost(host) }
-
     }
 
     private fun createErrorHandlerStub(): ErrorHandler {

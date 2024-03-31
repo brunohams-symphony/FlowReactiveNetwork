@@ -23,7 +23,6 @@ class NetworkObservingStrategyTest {
         assertThatIsConnected(strategy)
     }
 
-
     @Test
     fun preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
         // given
@@ -35,7 +34,7 @@ class NetworkObservingStrategyTest {
     private fun assertThatIsConnected(strategy: NetworkObservingStrategy) = runTest {
         // given
         val context = ApplicationProvider.getApplicationContext<Context>()
-        //when
+        // when
         strategy.observeNetworkConnectivity(context).map { it.state }.test {
             // then
             assertThat(awaitItem()).isEqualTo(NetworkInfo.State.CONNECTED)

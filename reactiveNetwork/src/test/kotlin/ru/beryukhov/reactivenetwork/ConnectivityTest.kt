@@ -41,7 +41,7 @@ class ConnectivityTest {
     @Test
     @Throws(Exception::class)
     fun stateShouldBeEqualToGivenValue() {
-    // given
+        // given
         val connectivity = Connectivity(
             state = NetworkInfo.State.CONNECTED,
             type = ConnectivityManager.TYPE_WIFI,
@@ -59,7 +59,7 @@ class ConnectivityTest {
     @Test
     @Throws(Exception::class)
     fun stateShouldBeEqualToOneOfGivenMultipleValues() {
-    // given
+        // given
         val connectivity = Connectivity(
             state = NetworkInfo.State.CONNECTING,
             type = ConnectivityManager.TYPE_WIFI,
@@ -77,10 +77,12 @@ class ConnectivityTest {
     @Test
     @Throws(Exception::class)
     fun stateShouldNotBeEqualToGivenValue() {
-    // given
-        val connectivity = Connectivity(state=NetworkInfo.State.DISCONNECTED,
-            type=ConnectivityManager.TYPE_WIFI,
-            typeName=TYPE_NAME_WIFI)
+        // given
+        val connectivity = Connectivity(
+            state = NetworkInfo.State.DISCONNECTED,
+            type = ConnectivityManager.TYPE_WIFI,
+            typeName = TYPE_NAME_WIFI
+        )
 
         // when
         val equalTo = hasState(NetworkInfo.State.CONNECTED)
@@ -92,10 +94,12 @@ class ConnectivityTest {
     @Test
     @Throws(Exception::class)
     fun typeShouldBeEqualToGivenValue() {
-    // given
-        val connectivity = Connectivity(state=NetworkInfo.State.CONNECTED,
-            type=ConnectivityManager.TYPE_WIFI,
-            typeName=TYPE_NAME_WIFI)
+        // given
+        val connectivity = Connectivity(
+            state = NetworkInfo.State.CONNECTED,
+            type = ConnectivityManager.TYPE_WIFI,
+            typeName = TYPE_NAME_WIFI
+        )
         // note that unknown type is added initially by the ConnectivityPredicate#hasType method
         val givenTypes = intArrayOf(connectivity.type, Connectivity.UNKNOWN_TYPE)
         // when
@@ -108,10 +112,12 @@ class ConnectivityTest {
     @Test
     @Throws(Exception::class)
     fun typeShouldBeEqualToOneOfGivenMultipleValues() {
-    // given
-        val connectivity = Connectivity(state=NetworkInfo.State.CONNECTING,
-            type=ConnectivityManager.TYPE_MOBILE,
-            typeName=TYPE_NAME_MOBILE)
+        // given
+        val connectivity = Connectivity(
+            state = NetworkInfo.State.CONNECTING,
+            type = ConnectivityManager.TYPE_MOBILE,
+            typeName = TYPE_NAME_MOBILE
+        )
 
         // note that unknown type is added initially by the ConnectivityPredicate#hasType method
         val givenTypes = intArrayOf(
@@ -129,10 +135,12 @@ class ConnectivityTest {
     @Test
     @Throws(Exception::class)
     fun typeShouldNotBeEqualToGivenValue() {
-    // given
-        val connectivity = Connectivity(state=NetworkInfo.State.CONNECTED,
-            type=ConnectivityManager.TYPE_WIFI,
-            typeName=TYPE_NAME_WIFI)
+        // given
+        val connectivity = Connectivity(
+            state = NetworkInfo.State.CONNECTED,
+            type = ConnectivityManager.TYPE_WIFI,
+            typeName = TYPE_NAME_WIFI
+        )
 
         // note that unknown type is added initially by the ConnectivityPredicate#hasType method
         val givenTypes = intArrayOf(ConnectivityManager.TYPE_MOBILE, Connectivity.UNKNOWN_TYPE)
@@ -145,7 +153,7 @@ class ConnectivityTest {
 
     @Test
     fun theSameConnectivityObjectsShouldBeEqual() {
-    // given
+        // given
         val connectivityOne = Connectivity()
         val connectivityTwo = Connectivity()
         // when
@@ -156,7 +164,7 @@ class ConnectivityTest {
 
     @Test
     fun twoDefaultObjectsShouldBeInTheSameBucket() {
-    // given
+        // given
         val connectivityOne = Connectivity()
         val connectivityTwo = Connectivity()
         // when
@@ -167,7 +175,7 @@ class ConnectivityTest {
 
     @Test
     fun shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicate() {
-    // given
+        // given
         val types =
             intArrayOf(ConnectivityManager.TYPE_MOBILE, ConnectivityManager.TYPE_WIFI)
         val expectedOutputTypes = intArrayOf(
@@ -184,7 +192,7 @@ class ConnectivityTest {
 
     @Test
     fun shouldAppendUnknownTypeWhileFilteringNetworkTypesInsidePredicateForEmptyArray() {
-    // given
+        // given
         val types = intArrayOf()
         val expectedOutputTypes = intArrayOf(Connectivity.UNKNOWN_TYPE)
         // when
@@ -195,7 +203,7 @@ class ConnectivityTest {
 
     @Test
     fun shouldCreateConnectivityWithBuilder() {
-    // given
+        // given
         val state = NetworkInfo.State.CONNECTED
         val detailedState = DetailedState.CONNECTED
         val type = ConnectivityManager.TYPE_WIFI
@@ -205,17 +213,19 @@ class ConnectivityTest {
         val reason = "no reason"
         val extraInfo = "extra info"
         // when
-        val connectivity = Connectivity(state=state,
-            detailedState=detailedState,
-            type=type,
-            subType=subType,
-            available=true,
-            failover=false,
-            roaming=true,
-            typeName=typeName,
-            subTypeName=subTypeName,
-            reason=reason,
-            extraInfo=extraInfo)
+        val connectivity = Connectivity(
+            state = state,
+            detailedState = detailedState,
+            type = type,
+            subType = subType,
+            available = true,
+            failover = false,
+            roaming = true,
+            typeName = typeName,
+            subTypeName = subTypeName,
+            reason = reason,
+            extraInfo = extraInfo
+        )
 
         // then
         assertThat(connectivity.state).isEqualTo(state)
@@ -233,30 +243,34 @@ class ConnectivityTest {
 
     @Test
     fun connectivityShouldNotBeEqualToAnotherOne() {
-    // given
-        val connectivityOne = Connectivity(state=NetworkInfo.State.CONNECTED,
-            detailedState=DetailedState.CONNECTED,
-            type=ConnectivityManager.TYPE_WIFI,
-            subType=1,
-            available=true,
-            failover=true,
-            roaming=true,
-            typeName=TYPE_NAME_WIFI,
-            subTypeName="subtypeOne",
-            reason="reasonOne",
-            extraInfo="extraInfoOne")
+        // given
+        val connectivityOne = Connectivity(
+            state = NetworkInfo.State.CONNECTED,
+            detailedState = DetailedState.CONNECTED,
+            type = ConnectivityManager.TYPE_WIFI,
+            subType = 1,
+            available = true,
+            failover = true,
+            roaming = true,
+            typeName = TYPE_NAME_WIFI,
+            subTypeName = "subtypeOne",
+            reason = "reasonOne",
+            extraInfo = "extraInfoOne"
+        )
 
-        val connectivityTwo = Connectivity(state=NetworkInfo.State.DISCONNECTED,
-            detailedState=DetailedState.DISCONNECTED,
-            type=ConnectivityManager.TYPE_MOBILE,
-            subType=2,
-            available=false,
-            failover=false,
-            roaming=false,
-            typeName=TYPE_NAME_MOBILE,
-            subTypeName="subtypeTwo",
-            reason="reasonTwo",
-            extraInfo="extraInfoTwo")
+        val connectivityTwo = Connectivity(
+            state = NetworkInfo.State.DISCONNECTED,
+            detailedState = DetailedState.DISCONNECTED,
+            type = ConnectivityManager.TYPE_MOBILE,
+            subType = 2,
+            available = false,
+            failover = false,
+            roaming = false,
+            typeName = TYPE_NAME_MOBILE,
+            subTypeName = "subtypeTwo",
+            reason = "reasonTwo",
+            extraInfo = "extraInfoTwo"
+        )
         // when
         val isAnotherConnectivityTheSame = connectivityOne == connectivityTwo
         // then
@@ -265,7 +279,7 @@ class ConnectivityTest {
 
     @Test
     fun shouldCreateDefaultConnectivityWhenConnectivityManagerIsNull() {
-    // given
+        // given
         val context = ApplicationProvider.getApplicationContext<Context>()
         val connectivityManager: ConnectivityManager? = null
         // when

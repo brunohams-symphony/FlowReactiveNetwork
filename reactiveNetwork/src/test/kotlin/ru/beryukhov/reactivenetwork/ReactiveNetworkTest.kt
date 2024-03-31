@@ -13,7 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import ru.beryukhov.reactivenetwork.base.BaseFlowTest
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingSettings.Companion.builder
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingStrategy
 import ru.beryukhov.reactivenetwork.internet.observing.error.DefaultErrorHandler
@@ -23,7 +22,7 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
 import ru.beryukhov.reactivenetwork.network.observing.strategy.LollipopNetworkObservingStrategy
 
 @RunWith(RobolectricTestRunner::class)
-class ReactiveNetworkTest  {
+class ReactiveNetworkTest {
     @Test
     fun testReactiveNetworkObjectShouldNotBeNull() {
         // given
@@ -74,7 +73,7 @@ class ReactiveNetworkTest  {
 
     @Test
     fun observeInternetConnectivityDefaultShouldNotBeNull() {
-    // given
+        // given
         // when
         val observable = ReactiveNetwork().observeInternetConnectivity()
         // then

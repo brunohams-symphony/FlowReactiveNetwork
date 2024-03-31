@@ -1,5 +1,6 @@
 plugins {
     id("convention.detekt")
+    // id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
 buildscript {
@@ -20,12 +21,4 @@ allprojects {
         mavenCentral()
         maven("https://dl.bintray.com/andreyberyukhov/FlowReactiveNetwork")
     }
-}
-
-plugins {
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-}
-
-task<Delete>("clean") {
-    delete(rootProject.buildDir)
 }

@@ -2,6 +2,7 @@ package ru.beryukhov.reactivenetwork.network.observing.strategy
 
 import android.content.Context
 import android.net.NetworkInfo
+import androidx.test.core.app.ApplicationProvider
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.mockk.spyk
@@ -18,7 +19,7 @@ class LollipopNetworkObservingStrategyTest {
 
     @Test
     fun shouldObserveConnectivity() = runTest {
-    // given
+        // given
         val strategy: NetworkObservingStrategy = LollipopNetworkObservingStrategy()
         val context = ApplicationProvider.getApplicationContext<Context>()
 
@@ -29,7 +30,7 @@ class LollipopNetworkObservingStrategyTest {
 
     @Test
     fun shouldCallOnError() {
-    // given
+        // given
         val message = "error message"
         val exception = Exception()
         val strategy = spyk(LollipopNetworkObservingStrategy())

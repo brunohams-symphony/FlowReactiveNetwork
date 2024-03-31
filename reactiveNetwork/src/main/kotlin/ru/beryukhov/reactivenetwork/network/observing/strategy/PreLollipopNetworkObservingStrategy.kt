@@ -6,9 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -61,4 +58,3 @@ public class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
         Log.e(ReactiveNetwork.LOG_TAG, message, exception)
     }
 }
-

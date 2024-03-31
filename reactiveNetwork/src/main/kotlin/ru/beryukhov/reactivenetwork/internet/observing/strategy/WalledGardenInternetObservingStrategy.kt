@@ -1,9 +1,5 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -11,6 +7,10 @@ import ru.beryukhov.reactivenetwork.Preconditions
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingStrategy
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 import ru.beryukhov.reactivenetwork.tickerFlow
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * Walled Garden Strategy for monitoring connectivity with the Internet.
@@ -26,7 +26,10 @@ public class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
 
     override fun observeInternetConnectivity(
         initialIntervalInMs: Int,
-        intervalInMs: Int, host: String, port: Int, timeoutInMs: Int,
+        intervalInMs: Int,
+        host: String,
+        port: Int,
+        timeoutInMs: Int,
         httpResponse: Int,
         errorHandler: ErrorHandler
     ): Flow<Boolean> {
@@ -71,7 +74,9 @@ public class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
             )
         ) {
             HTTPS_PROTOCOL + host
-        } else host
+        } else {
+            host
+        }
     }
 
     private fun checkGeneralPreconditions(

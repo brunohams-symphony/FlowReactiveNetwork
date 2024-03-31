@@ -1,8 +1,5 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -10,6 +7,9 @@ import ru.beryukhov.reactivenetwork.Preconditions
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingStrategy
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 import ru.beryukhov.reactivenetwork.tickerFlow
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 /**
  * Socket strategy for monitoring connectivity with the Internet.
@@ -43,7 +43,6 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
             period = intervalInMs.toLong(),
             initialDelay = initialIntervalInMs.toLong()
         ).map { isConnected(adjustedHost, port, timeoutInMs, errorHandler) }.distinctUntilChanged()
-
     }
 
     override suspend fun checkInternetConnectivity(
@@ -77,10 +76,7 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
         return host
     }
 
-    private fun checkGeneralPreconditions(
-        host: String, port: Int, timeoutInMs: Int,
-        errorHandler: ErrorHandler
-    ) {
+    private fun checkGeneralPreconditions(host: String, port: Int, timeoutInMs: Int, errorHandler: ErrorHandler) {
         Preconditions.checkNotNullOrEmpty(
             host,
             "host is null or empty"
@@ -108,10 +104,7 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
      * @param errorHandler error handler for socket connection
      * @return boolean true if connected and false if not
      */
-    internal fun isConnected(
-        host: String?, port: Int, timeoutInMs: Int,
-        errorHandler: ErrorHandler
-    ): Boolean {
+    internal fun isConnected(host: String?, port: Int, timeoutInMs: Int, errorHandler: ErrorHandler): Boolean {
         val socket = Socket()
         return isConnected(socket, host, port, timeoutInMs, errorHandler)
     }

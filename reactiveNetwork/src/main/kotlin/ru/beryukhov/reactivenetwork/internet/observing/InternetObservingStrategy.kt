@@ -39,12 +39,15 @@ public interface InternetObservingStrategy {
      * @param port for checking Internet connectivity
      * @param timeoutInMs for pinging remote host in milliseconds
      * @param errorHandler for handling errors while checking connectivity
-     * @return  Boolean - true, when we have connection with host and false if
+     * @return Boolean - true, when we have connection with host and false if
      * not
      */
     public suspend fun checkInternetConnectivity(
-        host: String, port: Int,
-        timeoutInMs: Int, httpResponse: Int, errorHandler: ErrorHandler
+        host: String,
+        port: Int,
+        timeoutInMs: Int,
+        httpResponse: Int,
+        errorHandler: ErrorHandler
     ): Boolean
 
     /**

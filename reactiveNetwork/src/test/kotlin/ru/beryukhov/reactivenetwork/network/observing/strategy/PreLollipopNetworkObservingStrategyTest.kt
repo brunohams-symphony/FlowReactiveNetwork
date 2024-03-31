@@ -15,9 +15,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import ru.beryukhov.reactivenetwork.base.emission
-import ru.beryukhov.reactivenetwork.base.expect
-import ru.beryukhov.reactivenetwork.base.testIn
 import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
 
 @RunWith(RobolectricTestRunner::class)

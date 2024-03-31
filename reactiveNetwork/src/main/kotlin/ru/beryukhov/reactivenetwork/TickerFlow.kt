@@ -1,10 +1,10 @@
 package ru.beryukhov.reactivenetwork
 
-import java.util.Timer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.Timer
 import kotlin.concurrent.schedule
 
 /**

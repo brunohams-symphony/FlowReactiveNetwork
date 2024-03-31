@@ -42,7 +42,6 @@ dependencies {
 
     implementation(libs.androidx.annotation)
 
-
     testImplementation(libs.kotlin.test)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.truth)
@@ -52,6 +51,5 @@ dependencies {
     testImplementation(libs.androidx.test)
 }
 
-
-//apply {from("${rootProject.projectDir}/scripts/publish-root.gradle")}
-//apply {from("${rootProject.projectDir}/scripts/publish-module.gradle")}
+// apply {from("${rootProject.projectDir}/scripts/publish-root.gradle")}
+// apply {from("${rootProject.projectDir}/scripts/publish-module.gradle")}

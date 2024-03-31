@@ -23,11 +23,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import ru.beryukhov.reactivenetwork.Connectivity
-import ru.beryukhov.reactivenetwork.base.emission
-import ru.beryukhov.reactivenetwork.base.emissionCount
-import ru.beryukhov.reactivenetwork.base.emissions
-import ru.beryukhov.reactivenetwork.base.expect
-import ru.beryukhov.reactivenetwork.base.testIn
 
 @RunWith(RobolectricTestRunner::class)
 open class MarshmallowNetworkObservingStrategyTest {
@@ -59,8 +54,8 @@ open class MarshmallowNetworkObservingStrategyTest {
     }
 
     @Test
-    fun shouldCallOnError() { 
-    // given
+    fun shouldCallOnError() {
+        // given
         val message = "error message"
         val exception = Exception()
         // when
@@ -124,8 +119,8 @@ open class MarshmallowNetworkObservingStrategyTest {
     }
 
     @Test
-    fun shouldNotBeInIdleModeWhenDeviceIsNotInIdleMode() { 
-    // given
+    fun shouldNotBeInIdleModeWhenDeviceIsNotInIdleMode() {
+        // given
         preparePowerManagerMocks(idleMode = false, ignoreOptimizations = true)
         // when
         val isIdleMode = strategy.isIdleMode(contextMock)
@@ -134,8 +129,8 @@ open class MarshmallowNetworkObservingStrategyTest {
     }
 
     @Test
-    fun shouldReceiveIntentInIdleMode() { 
-    // given
+    fun shouldReceiveIntentInIdleMode() {
+        // given
         preparePowerManagerMocks(idleMode = true, ignoreOptimizations = false)
         val broadcastReceiver = strategy.createIdleBroadcastReceiver()
         // when
@@ -143,11 +138,9 @@ open class MarshmallowNetworkObservingStrategyTest {
         // then
         verify { strategy.onNext(any()) }
     }
-
-
     @Test
-    fun shouldReceiveIntentWhenIsNotInIdleMode() { 
-    // given
+    fun shouldReceiveIntentWhenIsNotInIdleMode() {
+        // given
         preparePowerManagerMocks(idleMode = false, ignoreOptimizations = false)
         val broadcastReceiver = strategy.createIdleBroadcastReceiver()
         every { contextMock.getSystemService(Context.CONNECTIVITY_SERVICE) } returns connectivityManager
@@ -183,8 +176,8 @@ open class MarshmallowNetworkObservingStrategyTest {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Test
-    fun shouldInvokeOnNextOnNetworkAvailable() { 
-    // given
+    fun shouldInvokeOnNextOnNetworkAvailable() {
+        // given
         val networkCallback = strategy.createNetworkCallback(context)
         // when
         networkCallback.onAvailable(network)
@@ -194,8 +187,8 @@ open class MarshmallowNetworkObservingStrategyTest {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Test
-    fun shouldInvokeOnNextOnNetworkLost() { 
-    // given
+    fun shouldInvokeOnNextOnNetworkLost() {
+        // given
         val networkCallback = strategy.createNetworkCallback(context)
         // when
         networkCallback.onLost(network)
@@ -205,8 +198,8 @@ open class MarshmallowNetworkObservingStrategyTest {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Test
-    fun shouldHandleErrorWhileTryingToUnregisterCallback() { 
-    // given
+    fun shouldHandleErrorWhileTryingToUnregisterCallback() {
+        // given
         strategy.observeNetworkConnectivity(context)
         val exception = IllegalArgumentException()
         every { connectivityManager.unregisterNetworkCallback(any<NetworkCallback>()) } throws exception
@@ -222,8 +215,8 @@ open class MarshmallowNetworkObservingStrategyTest {
     }
 
     @Test
-    fun shouldHandleErrorWhileTryingToUnregisterReceiver() { 
-    // given
+    fun shouldHandleErrorWhileTryingToUnregisterReceiver() {
+        // given
         strategy.observeNetworkConnectivity(context)
         val exception = RuntimeException()
         every { contextMock.unregisterReceiver(any()) } throws exception
@@ -252,9 +245,7 @@ open class MarshmallowNetworkObservingStrategyTest {
         assertThatConnectivityIsPropagatedDuringChange(lastType, currentType)
     }
 
-    private fun assertThatConnectivityIsPropagatedDuringChange(
-        lastType: Int, currentType: Int
-    ) = runTest {
+    private fun assertThatConnectivityIsPropagatedDuringChange(lastType: Int, currentType: Int) = runTest {
         // given
         val last = Connectivity(
             type = lastType,
@@ -274,7 +265,6 @@ open class MarshmallowNetworkObservingStrategyTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun shouldNotPropagateLastConnectivityEventWhenTypeIsNotChanged() = runTest {
         // given
@@ -296,7 +286,6 @@ open class MarshmallowNetworkObservingStrategyTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun shouldNotPropagateLastConnectivityWhenWasNotConnected() = runTest {
         // given
@@ -317,7 +306,6 @@ open class MarshmallowNetworkObservingStrategyTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun shouldNotPropagateLastConnectivityWhenIsConnected() = runTest {
         val last = Connectivity(
@@ -337,7 +325,6 @@ open class MarshmallowNetworkObservingStrategyTest {
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun shouldNotPropagateLastConnectivityWhenIsIdle() = runTest {
         // given
@@ -359,4 +346,3 @@ open class MarshmallowNetworkObservingStrategyTest {
         }
     }
 }
-

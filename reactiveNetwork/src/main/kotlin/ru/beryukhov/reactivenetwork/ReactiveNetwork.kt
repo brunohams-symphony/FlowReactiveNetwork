@@ -33,9 +33,11 @@ public class ReactiveNetwork {
             Preconditions.isAtLeastAndroidMarshmallow() -> {
                 MarshmallowNetworkObservingStrategy()
             }
+
             Preconditions.isAtLeastAndroidLollipop() -> {
                 LollipopNetworkObservingStrategy()
             }
+
             else -> {
                 PreLollipopNetworkObservingStrategy()
             }
@@ -179,9 +181,11 @@ public class ReactiveNetwork {
      */
     @RequiresPermission(Manifest.permission.INTERNET)
     internal suspend fun checkInternetConnectivity(
-
         strategy: InternetObservingStrategy,
-        host: String, port: Int, timeoutInMs: Int, httpResponse: Int,
+        host: String,
+        port: Int,
+        timeoutInMs: Int,
+        httpResponse: Int,
         errorHandler: ErrorHandler
     ): Boolean {
         checkStrategyIsNotNull(strategy)

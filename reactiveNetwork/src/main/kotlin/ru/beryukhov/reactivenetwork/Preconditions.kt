@@ -22,7 +22,7 @@ public object Preconditions {
      * @param string to verify
      * @param message to be thrown in exception
      */
-    public fun checkNotNullOrEmpty(string: String?,  message:String) {
+    public fun checkNotNullOrEmpty(string: String?, message: String) {
         if (string.isNullOrEmpty()) {
             throw IllegalArgumentException(message)
         }
@@ -34,7 +34,7 @@ public object Preconditions {
      * @param number integer to verify
      * @param message to be thrown in exception
      */
-    public fun checkGreaterOrEqualToZero(number: Int,  message: String) {
+    public fun checkGreaterOrEqualToZero(number: Int, message: String) {
         if (number < 0) {
             throw IllegalArgumentException(message)
         }
@@ -46,7 +46,7 @@ public object Preconditions {
      * @param number integer to verify
      * @param message to be thrown in exception
      */
-    public fun checkGreaterThanZero(number: Int,  message: String) {
+    public fun checkGreaterThanZero(number: Int, message: String) {
         if (number <= 0) {
             throw IllegalArgumentException(message)
         }
@@ -70,7 +70,7 @@ public object Preconditions {
      * @return boolean true if current Android version is Marshmallow or higher
      */
     @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.M)
-    public fun isAtLeastAndroidMarshmallow():Boolean {
+    public fun isAtLeastAndroidMarshmallow(): Boolean {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     }
 }

@@ -6,14 +6,14 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 @RunWith(RobolectricTestRunner::class)
 class SocketInternetObservingStrategyTest {
@@ -24,7 +24,6 @@ class SocketInternetObservingStrategyTest {
 
     private val host: String = strategy.getDefaultPingHost()
 
-    
     @Test
     fun shouldBeConnectedToTheInternet() = runTest {
         // given
@@ -53,7 +52,6 @@ class SocketInternetObservingStrategyTest {
         }
     }
 
-    
     @Test
     fun shouldNotBeConnectedToTheInternet() = runTest {
         // given
@@ -89,7 +87,7 @@ class SocketInternetObservingStrategyTest {
             host,
             PORT
         )
-        every { socket.connect(address, TIMEOUT_IN_MS) } throws (IOException())
+        every { socket.connect(address, TIMEOUT_IN_MS) } throws IOException()
 
         // when
         val isConnected = strategy.isConnected(
@@ -109,7 +107,7 @@ class SocketInternetObservingStrategyTest {
         // given
         val errorMsg = "Could not close the socket"
         val givenException = IOException(errorMsg)
-        every { socket.close() } throws (givenException)
+        every { socket.close() } throws givenException
 
         // when
         strategy.isConnected(
@@ -144,7 +142,6 @@ class SocketInternetObservingStrategyTest {
         )
         // then
         assertThat(isConnected).isTrue()
-
     }
 
     @Test
@@ -225,7 +222,6 @@ class SocketInternetObservingStrategyTest {
         }
         // then
         verify { strategy.adjustHost(host) }
-
     }
 
     companion object {

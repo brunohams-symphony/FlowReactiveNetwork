@@ -92,6 +92,7 @@ public class InternetObservingSettings private constructor(
         internal var errorHandler: ErrorHandler =
             DefaultErrorHandler()
         internal var strategy: InternetObservingStrategy = WalledGardenInternetObservingStrategy()
+
         /**
          * sets initial ping interval in milliseconds
          *
@@ -199,5 +200,4 @@ public class InternetObservingSettings private constructor(
             return Builder()
         }
     }
-
 }
