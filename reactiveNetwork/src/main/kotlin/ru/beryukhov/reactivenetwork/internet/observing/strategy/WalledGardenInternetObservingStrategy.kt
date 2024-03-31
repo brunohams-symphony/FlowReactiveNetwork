@@ -1,9 +1,5 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -11,6 +7,10 @@ import ru.beryukhov.reactivenetwork.Preconditions
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingStrategy
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 import ru.beryukhov.reactivenetwork.tickerFlow
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * Walled Garden Strategy for monitoring connectivity with the Internet.
@@ -19,14 +19,17 @@ import ru.beryukhov.reactivenetwork.tickerFlow
  * are generated. Instead HTTP 200 (OK), we got HTTP 204 (NO CONTENT), but it still can tell us
  * if a device is connected to the Internet or not.
  */
-class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
+public class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
     override fun getDefaultPingHost(): String {
         return DEFAULT_HOST
     }
 
     override fun observeInternetConnectivity(
         initialIntervalInMs: Int,
-        intervalInMs: Int, host: String, port: Int, timeoutInMs: Int,
+        intervalInMs: Int,
+        host: String,
+        port: Int,
+        timeoutInMs: Int,
         httpResponse: Int,
         errorHandler: ErrorHandler
     ): Flow<Boolean> {
@@ -71,7 +74,9 @@ class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
             )
         ) {
             HTTPS_PROTOCOL + host
-        } else host
+        } else {
+            host
+        }
     }
 
     private fun checkGeneralPreconditions(
@@ -164,7 +169,7 @@ class WalledGardenInternetObservingStrategy : InternetObservingStrategy {
         return urlConnection
     }
 
-    companion object {
+    private companion object {
         private const val DEFAULT_HOST = "http://clients3.google.com/generate_204"
         private const val HTTP_PROTOCOL = "http://"
         private const val HTTPS_PROTOCOL = "https://"

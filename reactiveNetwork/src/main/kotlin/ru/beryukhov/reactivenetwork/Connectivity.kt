@@ -8,24 +8,24 @@ import android.net.NetworkInfo.DetailedState
 /**
  * Connectivity class represents current connectivity status. It wraps NetworkInfo object.
  */
-data class Connectivity(
-    val state : NetworkInfo.State = NetworkInfo.State.DISCONNECTED,
-    val detailedState : DetailedState? = DetailedState.IDLE,
-    val type : Int = UNKNOWN_TYPE,
-    val subType : Int = UNKNOWN_SUB_TYPE,
-    val available : Boolean = false,
-    val failover : Boolean = false,
-    val roaming : Boolean = false,
-    val typeName : String? = "NONE",
-    val subTypeName : String? = "NONE",
-    val reason : String? = "",
-    val extraInfo : String? = ""
-){
-    companion object {
-        const val UNKNOWN_TYPE = -1
-        const val UNKNOWN_SUB_TYPE = -1
+public data class Connectivity(
+    val state: NetworkInfo.State = NetworkInfo.State.DISCONNECTED,
+    val detailedState: DetailedState? = DetailedState.IDLE,
+    val type: Int = UNKNOWN_TYPE,
+    val subType: Int = UNKNOWN_SUB_TYPE,
+    val available: Boolean = false,
+    val failover: Boolean = false,
+    val roaming: Boolean = false,
+    val typeName: String? = "NONE",
+    val subTypeName: String? = "NONE",
+    val reason: String? = "",
+    val extraInfo: String? = ""
+) {
+    public companion object {
+        public const val UNKNOWN_TYPE: Int = -1
+        public const val UNKNOWN_SUB_TYPE: Int = -1
 
-        fun create(context: Context): Connectivity {
+        public fun create(context: Context): Connectivity {
             Preconditions.checkNotNull(context, "context == null")
             return create(
                 context,
@@ -52,17 +52,17 @@ data class Connectivity(
 
         private fun create(networkInfo: NetworkInfo): Connectivity {
             return Connectivity(
-                state=networkInfo.state,
-                detailedState=networkInfo.detailedState,
-                type=networkInfo.type,
-                subType=networkInfo.subtype,
-                available=networkInfo.isAvailable,
-                failover=networkInfo.isFailover,
-                roaming=networkInfo.isRoaming,
-                typeName=networkInfo.typeName,
-                subTypeName=networkInfo.subtypeName,
-                reason=networkInfo.reason,
-                extraInfo=networkInfo.extraInfo
+                state = networkInfo.state,
+                detailedState = networkInfo.detailedState,
+                type = networkInfo.type,
+                subType = networkInfo.subtype,
+                available = networkInfo.isAvailable,
+                failover = networkInfo.isFailover,
+                roaming = networkInfo.isRoaming,
+                typeName = networkInfo.typeName,
+                subTypeName = networkInfo.subtypeName,
+                reason = networkInfo.reason,
+                extraInfo = networkInfo.extraInfo
             )
         }
     }

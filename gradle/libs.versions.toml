@@ -1,0 +1,40 @@
+[versions]
+publishedLibVersion = "1.0.2"
+
+targetSdk = "33"
+compileSdk = "34"
+minSdk = "21"
+
+kotlin = "1.9.23" # https://kotlinlang.org/docs/releases.html#release-details
+agp = "8.2.2" # https://developer.android.com/studio/releases/gradle-plugin
+bintray = "1.8.5"
+
+coroutines = "1.8.0" # https://github.com/Kotlin/kotlinx.coroutines
+
+detekt = "1.23.6" # https://github.com/detekt/detekt
+
+[libraries]
+kotlinGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+androidGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+bintrayGradle = { module = "com.jfrog.bintray.gradle:gradle-bintray-plugin", version.ref = "bintray" }
+detektGradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+
+detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+coreKtx = "androidx.core:core-ktx:1.12.0"
+material = "com.google.android.material:material:1.11.0"
+
+truth = "com.google.truth:truth:1.0.1"
+robolectric = "org.robolectric:robolectric:4.12"
+mockk = "io.mockk:mockk:1.13.10" # https://github.com/mockk/mockk
+turbine = "app.cash.turbine:turbine:1.1.0"
+
+androidx-annotation = "androidx.annotation:annotation:1.7.1" # https://mvnrepository.com/artifact/androidx.annotation/annotation
+androidx-test="androidx.test:core:1.5.0"
+
+flowreactivenetwork =  { module = "ru.beryukhov:flowreactivenetwork", version.ref = "publishedLibVersion" }

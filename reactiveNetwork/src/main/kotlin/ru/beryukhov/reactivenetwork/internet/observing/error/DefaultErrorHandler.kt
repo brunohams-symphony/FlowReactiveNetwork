@@ -3,7 +3,7 @@ package ru.beryukhov.reactivenetwork.internet.observing.error
 import android.util.Log
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
 
-class DefaultErrorHandler :
+public class DefaultErrorHandler :
     ErrorHandler {
     override fun handleError(
         exception: Exception?,

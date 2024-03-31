@@ -6,14 +6,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onStart
 import ru.beryukhov.reactivenetwork.Connectivity
 import ru.beryukhov.reactivenetwork.ReactiveNetwork
 import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
@@ -22,8 +19,8 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
  * Network observing strategy for Android devices before Lollipop (API 20 or lower).
  * Uses Broadcast Receiver.
  */
-class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
-    @OptIn(ExperimentalCoroutinesApi::class)
+public class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
+
     override fun observeNetworkConnectivity(context: Context): Flow<Connectivity> {
         val filter = IntentFilter()
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -38,13 +35,9 @@ class PreLollipopNetworkObservingStrategy : NetworkObservingStrategy {
             }
             context.registerReceiver(receiver, filter)
             awaitClose {
-                GlobalScope.launch {
-                    withContext(Dispatchers.Main) {
-                        tryToUnregisterReceiver(context, receiver)
-                    }
-                }
+                tryToUnregisterReceiver(context, receiver)
             }
-        }
+        }.onStart { emit(Connectivity.create(context)) }.distinctUntilChanged()
     }
 
     internal fun tryToUnregisterReceiver(

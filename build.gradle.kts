@@ -1,29 +1,24 @@
-buildscript {
-    val kotlin_version by extra("1.5.20")
-    val coroutines_version by extra("1.5.1")
-    val robolectric_version by extra("4.6.1")
+plugins {
+    id("convention.detekt")
+    // id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+}
 
+buildscript {
     repositories {
         google()
         mavenCentral()
+        maven("https://plugins.gradle.org/m2/")
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath(libs.androidGradle)
+        classpath(libs.kotlinGradle)
+        classpath(libs.bintrayGradle)
     }
 }
-
 allprojects {
     repositories {
         google()
         mavenCentral()
+        maven("https://dl.bintray.com/andreyberyukhov/FlowReactiveNetwork")
     }
-}
-
-plugins {
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-}
-
-task<Delete>("clean") {
-    delete(rootProject.buildDir)
 }

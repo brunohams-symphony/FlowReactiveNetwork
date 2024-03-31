@@ -3,43 +3,41 @@ package ru.beryukhov.reactivenetwork.network.observing
 import android.content.Context
 import android.net.NetworkInfo
 import androidx.test.core.app.ApplicationProvider
-import ru.beryukhov.reactivenetwork.base.emission
-import ru.beryukhov.reactivenetwork.base.expect
-import ru.beryukhov.reactivenetwork.base.testIn
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.map
-import org.junit.Ignore
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import ru.beryukhov.reactivenetwork.base.BaseFlowTest
 import ru.beryukhov.reactivenetwork.network.observing.strategy.LollipopNetworkObservingStrategy
 import ru.beryukhov.reactivenetwork.network.observing.strategy.PreLollipopNetworkObservingStrategy
 
 @RunWith(RobolectricTestRunner::class)
-class NetworkObservingStrategyTest: BaseFlowTest() {
+class NetworkObservingStrategyTest {
     @Test
-    fun lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() { // given
+    fun lollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
+        // given
         val strategy: NetworkObservingStrategy = LollipopNetworkObservingStrategy()
         // when
         assertThatIsConnected(strategy)
     }
 
-    @Ignore
     @Test
-    fun preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() { // given
+    fun preLollipopObserveNetworkConnectivityShouldBeConnectedWhenNetworkIsAvailable() {
+        // given
         val strategy: NetworkObservingStrategy = PreLollipopNetworkObservingStrategy()
         // when
         assertThatIsConnected(strategy)
     }
 
-    private fun assertThatIsConnected(strategy: NetworkObservingStrategy) { // given
+    private fun assertThatIsConnected(strategy: NetworkObservingStrategy) = runTest {
+        // given
         val context = ApplicationProvider.getApplicationContext<Context>()
-        //when
-
-            val testFlow = strategy.observeNetworkConnectivity(context).map { it.state }.testIn(scope = testScopeRule)
-
+        // when
+        strategy.observeNetworkConnectivity(context).map { it.state }.test {
             // then
-            testFlow expect emission(index = 0, expected = NetworkInfo.State.CONNECTED)
-
+            assertThat(awaitItem()).isEqualTo(NetworkInfo.State.CONNECTED)
+        }
     }
 }

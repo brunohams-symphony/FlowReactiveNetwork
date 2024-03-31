@@ -3,16 +3,16 @@ package ru.beryukhov.reactivenetwork
 import android.content.Context
 import android.net.NetworkInfo
 import androidx.test.core.app.ApplicationProvider
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import ru.beryukhov.reactivenetwork.base.BaseFlowTest
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingSettings.Companion.builder
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingStrategy
 import ru.beryukhov.reactivenetwork.internet.observing.error.DefaultErrorHandler
@@ -22,9 +22,10 @@ import ru.beryukhov.reactivenetwork.network.observing.NetworkObservingStrategy
 import ru.beryukhov.reactivenetwork.network.observing.strategy.LollipopNetworkObservingStrategy
 
 @RunWith(RobolectricTestRunner::class)
-class ReactiveNetworkTest : BaseFlowTest() {
+class ReactiveNetworkTest {
     @Test
-    fun testReactiveNetworkObjectShouldNotBeNull() { // given
+    fun testReactiveNetworkObjectShouldNotBeNull() {
+        // given
         // when
         val reactiveNetwork = ReactiveNetwork()
         // then
@@ -32,13 +33,15 @@ class ReactiveNetworkTest : BaseFlowTest() {
     }
 
     @Test
-    fun observeNetworkConnectivityShouldNotBeNull() { // given
+    fun observeNetworkConnectivityShouldNotBeNull() {
+        // given
         networkConnectivityObservableShouldNotBeNull()
     }
 
     @Test
     @Config(sdk = [23])
-    fun observeNetworkConnectivityShouldNotBeNullForMarshmallow() { // given
+    fun observeNetworkConnectivityShouldNotBeNullForMarshmallow() {
+        // given
         networkConnectivityObservableShouldNotBeNull()
     }
 
@@ -48,7 +51,8 @@ class ReactiveNetworkTest : BaseFlowTest() {
         networkConnectivityObservableShouldNotBeNull()
     }
 
-    private fun networkConnectivityObservableShouldNotBeNull() { // given
+    private fun networkConnectivityObservableShouldNotBeNull() {
+        // given
         val context: Context = ApplicationProvider.getApplicationContext()
         // when
         val observable = ReactiveNetwork().observeNetworkConnectivity(context)
@@ -57,7 +61,8 @@ class ReactiveNetworkTest : BaseFlowTest() {
     }
 
     @Test
-    fun observeNetworkConnectivityWithStrategyShouldNotBeNull() { // given
+    fun observeNetworkConnectivityWithStrategyShouldNotBeNull() {
+        // given
         val context: Context = ApplicationProvider.getApplicationContext()
         val strategy: NetworkObservingStrategy = LollipopNetworkObservingStrategy()
         // when
@@ -67,7 +72,8 @@ class ReactiveNetworkTest : BaseFlowTest() {
     }
 
     @Test
-    fun observeInternetConnectivityDefaultShouldNotBeNull() { // given
+    fun observeInternetConnectivityDefaultShouldNotBeNull() {
+        // given
         // when
         val observable = ReactiveNetwork().observeInternetConnectivity()
         // then
@@ -75,20 +81,21 @@ class ReactiveNetworkTest : BaseFlowTest() {
     }
 
     @Test
-    fun observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() {
-        runBlocking {
-            // given
-            val context = ApplicationProvider.getApplicationContext<Context>()
-            // when
-            val connectivityFlow =
-                ReactiveNetwork().observeNetworkConnectivity(context).map { it.state }
-            // then
-            connectivityFlow.expectFirst(NetworkInfo.State.CONNECTED)
+    fun observeNetworkConnectivityShouldBeConnectedOnStartWhenNetworkIsAvailable() = runTest {
+        // given
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        // when
+        val connectivityFlow =
+            ReactiveNetwork().observeNetworkConnectivity(context).map { it.state }
+        // then
+        connectivityFlow.test {
+            assertThat(awaitItem()).isEqualTo(NetworkInfo.State.CONNECTED)
         }
     }
 
     @Test
-    fun observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() { // given
+    fun observeInternetConnectivityShouldNotThrowAnExceptionWhenStrategyIsNotNull() {
+        // given
         val strategy: InternetObservingStrategy = SocketInternetObservingStrategy()
         val errorHandler: ErrorHandler =
             DefaultErrorHandler()
@@ -108,7 +115,8 @@ class ReactiveNetworkTest : BaseFlowTest() {
     }
 
     @Test
-    fun shouldObserveInternetConnectivityWithCustomSettings() { // given
+    fun shouldObserveInternetConnectivityWithCustomSettings() {
+        // given
         val initialInterval = 1
         val interval = 2
         val host = "www.test.com"

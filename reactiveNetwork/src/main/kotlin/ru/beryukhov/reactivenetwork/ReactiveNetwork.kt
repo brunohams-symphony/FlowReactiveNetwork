@@ -17,7 +17,7 @@ import ru.beryukhov.reactivenetwork.network.observing.strategy.PreLollipopNetwor
  * listening network connection state and change of the WiFi signal strength
  * with Coroutines Flow. It was backported from ReactiveNetwork with Java and RxJava inside.
  */
-class ReactiveNetwork {
+public class ReactiveNetwork {
     /**
      * Observes network connectivity. Information about network state, type and typeName are contained
      * in
@@ -28,14 +28,16 @@ class ReactiveNetwork {
      * type and typeName
      */
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-    fun observeNetworkConnectivity(context: Context): Flow<Connectivity> {
+    public fun observeNetworkConnectivity(context: Context): Flow<Connectivity> {
         val strategy: NetworkObservingStrategy = when {
             Preconditions.isAtLeastAndroidMarshmallow() -> {
                 MarshmallowNetworkObservingStrategy()
             }
+
             Preconditions.isAtLeastAndroidLollipop() -> {
                 LollipopNetworkObservingStrategy()
             }
+
             else -> {
                 PreLollipopNetworkObservingStrategy()
             }
@@ -55,7 +57,7 @@ class ReactiveNetwork {
      * type and typeName
      */
     @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
-    fun observeNetworkConnectivity(
+    public fun observeNetworkConnectivity(
         context: Context,
         strategy: NetworkObservingStrategy
     ): Flow<Connectivity> {
@@ -75,7 +77,7 @@ class ReactiveNetwork {
      * and false if not
      */
     @RequiresPermission(Manifest.permission.INTERNET)
-    fun observeInternetConnectivity(): Flow<Boolean> {
+    public fun observeInternetConnectivity(): Flow<Boolean> {
         val settings = InternetObservingSettings.create()
         return observeInternetConnectivity(
             settings.strategy(), settings.initialInterval(),
@@ -92,7 +94,7 @@ class ReactiveNetwork {
      * not
      */
     @RequiresPermission(Manifest.permission.INTERNET)
-    fun observeInternetConnectivity(
+    public fun observeInternetConnectivity(
         settings: InternetObservingSettings
     ): Flow<Boolean> {
         return observeInternetConnectivity(
@@ -142,7 +144,7 @@ class ReactiveNetwork {
      * and false if not
      */
     @RequiresPermission(Manifest.permission.INTERNET)
-    suspend fun checkInternetConnectivity(): Boolean {
+    public suspend fun checkInternetConnectivity(): Boolean {
         val settings = InternetObservingSettings.create()
         return checkInternetConnectivity(
             settings.strategy(), settings.host(), settings.port(),
@@ -158,7 +160,7 @@ class ReactiveNetwork {
      * not
      */
     @RequiresPermission(Manifest.permission.INTERNET)
-    suspend fun checkInternetConnectivity(settings: InternetObservingSettings): Boolean {
+    public suspend fun checkInternetConnectivity(settings: InternetObservingSettings): Boolean {
         return checkInternetConnectivity(
             settings.strategy(), settings.host(), settings.port(),
             settings.timeout(), settings.httpResponse(), settings.errorHandler()
@@ -179,9 +181,11 @@ class ReactiveNetwork {
      */
     @RequiresPermission(Manifest.permission.INTERNET)
     internal suspend fun checkInternetConnectivity(
-
         strategy: InternetObservingStrategy,
-        host: String, port: Int, timeoutInMs: Int, httpResponse: Int,
+        host: String,
+        port: Int,
+        timeoutInMs: Int,
+        httpResponse: Int,
         errorHandler: ErrorHandler
     ): Boolean {
         checkStrategyIsNotNull(strategy)
@@ -198,7 +202,7 @@ class ReactiveNetwork {
         Preconditions.checkNotNull(strategy, "strategy == null")
     }
 
-    companion object {
-        const val LOG_TAG = "ReactiveNetwork"
+    public companion object {
+        public const val LOG_TAG: String = "ReactiveNetwork"
     }
 }

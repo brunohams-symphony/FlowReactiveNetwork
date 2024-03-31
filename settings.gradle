@@ -1,3 +1,0 @@
-include ':sample'
-include ':reactiveNetwork'
-rootProject.name = "FlowReactiveNetwork"
