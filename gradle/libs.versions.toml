@@ -11,11 +11,15 @@ bintray = "1.8.5"
 
 coroutines = "1.8.0" # https://github.com/Kotlin/kotlinx.coroutines
 
+detekt = "1.23.6" # https://github.com/detekt/detekt
+
 [libraries]
 kotlinGradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 androidGradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 bintrayGradle = { module = "com.jfrog.bintray.gradle:gradle-bintray-plugin", version.ref = "bintray" }
+detektGradle = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 
+detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }

@@ -1,3 +1,7 @@
+plugins {
+    id("convention.detekt")
+}
+
 buildscript {
     repositories {
         google()
