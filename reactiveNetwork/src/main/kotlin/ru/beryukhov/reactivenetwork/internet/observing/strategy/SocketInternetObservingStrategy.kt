@@ -1,9 +1,11 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import ru.beryukhov.reactivenetwork.Preconditions
+import ru.beryukhov.reactivenetwork.ReactiveNetwork
 import ru.beryukhov.reactivenetwork.internet.observing.InternetObservingStrategy
 import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 import ru.beryukhov.reactivenetwork.tickerFlow
@@ -129,8 +131,9 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
         return try {
             socket.connect(InetSocketAddress(host, port), timeoutInMs)
             socket.isConnected
-        } catch (e: IOException) {
-            errorHandler.handleError(e, "Could not establish connection with SocketInternetObservingStrategy")
+        } catch (e: Exception) {
+            Log.e(ReactiveNetwork.LOG_TAG,
+                "Could not establish connection with SocketInternetObservingStrategy, reason: $e")
             java.lang.Boolean.FALSE
         } finally {
             try {
