@@ -130,6 +130,7 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
             socket.connect(InetSocketAddress(host, port), timeoutInMs)
             socket.isConnected
         } catch (e: IOException) {
+            errorHandler.handleError(e, "Could not establish connection with SocketInternetObservingStrategy")
             java.lang.Boolean.FALSE
         } finally {
             try {
