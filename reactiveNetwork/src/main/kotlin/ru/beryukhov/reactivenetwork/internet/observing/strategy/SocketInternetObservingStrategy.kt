@@ -1,6 +1,5 @@
 package ru.beryukhov.reactivenetwork.internet.observing.strategy
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -10,7 +9,6 @@ import ru.beryukhov.reactivenetwork.internet.observing.error.ErrorHandler
 import ru.beryukhov.reactivenetwork.tickerFlow
 import java.io.IOException
 import java.net.InetSocketAddress
-import java.net.Proxy
 import java.net.Socket
 
 /**
@@ -107,12 +105,7 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
      * @return boolean true if connected and false if not
      */
     internal fun isConnected(host: String?, port: Int, timeoutInMs: Int, errorHandler: ErrorHandler): Boolean {
-        val socket = Socket(
-            Proxy(
-                Proxy.Type.SOCKS,
-                InetSocketAddress("10.20.1.190",8889)
-            )
-        )
+        val socket = Socket()
         return isConnected(socket, host, port, timeoutInMs, errorHandler)
     }
 
@@ -137,7 +130,6 @@ public class SocketInternetObservingStrategy : InternetObservingStrategy {
             socket.connect(InetSocketAddress(host, port), timeoutInMs)
             socket.isConnected
         } catch (e: IOException) {
-            errorHandler.handleError(e, "Could not establish connection with SocketInternetObservingStrategy")
             java.lang.Boolean.FALSE
         } finally {
             try {
